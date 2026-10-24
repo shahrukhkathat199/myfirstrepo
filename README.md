@@ -1,6 +1,5 @@
 # 🚀 CHOOSE.YOUR.ROADMAP — Interactive Engineering Career Matrix
 
-> **Award-Winning Frontend Web Engineering Project**  
 > An interactive 3D engineering career and skill roadmap designed to eliminate tutorial paralysis for undergraduate engineering students.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
