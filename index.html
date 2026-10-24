@@ -1,319 +1,3120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Snake</title>
-<style>
-  *{box-sizing:border-box}
-  body{
-    margin:0;min-height:100svh;display:grid;place-items:center;
-    background:radial-gradient(120% 90% at 50% 0%,#1c2333 0%,#0a0c11 65%);
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    color:#e6edf3;-webkit-user-select:none;user-select:none;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .wrap{display:flex;flex-direction:column;gap:12px;align-items:center;padding:20px}
-  .hud{
-    width:min(92vw,440px);display:flex;justify-content:space-between;
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7f8b9e;
-  }
-  .hud b{color:#4ade80;font-size:14px}
-  .board{position:relative;line-height:0}
-  canvas{
-    display:block;width:min(92vw,440px);height:auto;border-radius:14px;
-    background:#1a1e2a;box-shadow:0 0 0 1px #2b3242,0 24px 60px -24px #000;
-    touch-action:none;
-  }
-  .overlay{
-    position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:10px;text-align:center;
-    padding:22px;border-radius:14px;background:rgba(10,12,17,.82);
-    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);cursor:pointer;
-  }
-  .overlay[hidden]{display:none}
-  .overlay h1{margin:0;font-size:20px;letter-spacing:.18em;color:#fff}
-  .overlay p{margin:0;font-size:12.5px;line-height:1.8;color:#94a1b5}
-  .overlay b{color:#4ade80}
-  button{
-    margin-top:8px;padding:10px 24px;border:0;border-radius:999px;cursor:pointer;
-    font:inherit;font-size:13px;font-weight:700;letter-spacing:.08em;
-    text-transform:uppercase;color:#07230f;
-    background:linear-gradient(#86efac,#4ade80);
-    box-shadow:0 6px 18px -6px #4ade80;
-  }
-  button:active{transform:translateY(1px)}
-  .hint{font-size:11px;letter-spacing:.1em;color:#5f6b7d;text-transform:uppercase}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHOOSE.YOUR.ROADMAP — Engineering Career Matrix</title>
+  <meta name="description" content="Next-gen interactive 3D engineering skill roadmap. Master Computer Science, AI/ML, Data Science, and Cyber Security with prerequisite graph trees, curated free resources, and verified projects.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="CHOOSE.YOUR.ROADMAP — Interactive Engineering Career Matrix">
+  <meta property="og:description" content="Stop tutorial hell. Visualize your engineering career path in 3D with prerequisite trees and verified free resources.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+
+  <!-- Premium Typography: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- High-Performance Free CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       PREMIUM DESIGN SYSTEM (Vercel / Linear / Apple Engineering Aesthetic)
+       ========================================================================== */
+    :root {
+      --bg-base: #030712;
+      --bg-surface: #0b1120;
+      --bg-surface-elevated: #111c34;
+      --bg-glass: rgba(15, 23, 42, 0.72);
+      --bg-glass-hover: rgba(30, 41, 59, 0.85);
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(59, 130, 246, 0.35);
+      --border-glow: rgba(59, 130, 246, 0.6);
+
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-tertiary: #64748b;
+
+      /* Electric Engineering Accents */
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --violet: #8b5cf6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+
+      --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.25);
+
+      --transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --bg-glass: rgba(255, 255, 255, 0.82);
+      --bg-glass-hover: rgba(241, 245, 249, 0.95);
+
+      --border-subtle: rgba(15, 23, 42, 0.08);
+      --border-accent: rgba(37, 99, 235, 0.3);
+      --border-glow: rgba(37, 99, 235, 0.5);
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-tertiary: #94a3b8;
+
+      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+      --shadow-glow: 0 0 25px rgba(37, 99, 235, 0.15);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      position: relative;
+    }
+
+    /* Ambient Background Glows */
+    .ambient-glow-1 {
+      position: absolute;
+      top: -120px;
+      left: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ambient-glow-2 {
+      position: absolute;
+      top: 300px;
+      right: 5%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.12), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Engineering Subtle Grid Pattern */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse at 50% 25%, black 40%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 25%, black 40%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Smooth focus rings */
+    :focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 3px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION BAR
+       ========================================================================== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: var(--bg-glass);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: all var(--transition-smooth);
+    }
+
+    .nav-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .brand-symbol {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--blue);
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid var(--border-accent);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-smooth);
+      background: transparent;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), #2563eb);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+    }
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-glass {
+      background: var(--bg-glass);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+    .btn-glass:hover {
+      background: var(--bg-glass-hover);
+      border-color: var(--border-accent);
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: var(--radius-sm);
+      background: var(--bg-glass);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-icon:hover {
+      color: var(--text-primary);
+      border-color: var(--border-accent);
+    }
+
+    /* ==========================================================================
+       HERO & 3D INTERACTIVE MATRIX
+       ========================================================================== */
+    .hero {
+      padding: 48px 0 28px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 32px 0 20px;
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--blue);
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid var(--border-accent);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      width: fit-content;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+
+    .hero-h1 {
+      font-size: clamp(34px, 4.4vw, 54px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .hero-h1 span.gradient {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-lead {
+      font-size: 16.5px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 3D Canvas Box */
+    .canvas-card {
+      position: relative;
+      height: 380px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-glow);
+    }
+
+    #three-viewport {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    #three-viewport:active {
+      cursor: grabbing;
+    }
+
+    .canvas-hud {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .hud-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(3, 7, 18, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 3px 9px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .hud-tip {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      background: rgba(3, 7, 18, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       DISCIPLINE TABS
+       ========================================================================== */
+    .branch-nav-wrap {
+      margin: 32px 0 24px;
+    }
+
+    .branch-nav-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .branch-nav-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    .branch-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .branch-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 520px) {
+      .branch-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .branch-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .branch-card:hover {
+      background: var(--bg-surface-elevated);
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+    }
+
+    .branch-card.active {
+      border-color: var(--blue);
+      background: var(--bg-surface-elevated);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+    }
+
+    .branch-card.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    .branch-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .branch-info {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .branch-name {
+      font-weight: 700;
+      font-size: 15px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .branch-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       DASHBOARD HUD: SPOTLIGHT & PROGRESS
+       ========================================================================== */
+    .dashboard-hud {
+      display: grid;
+      grid-template-columns: 1.8fr 1.2fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-hud {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Recommended Target Spotlight */
+    .spotlight-card {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), var(--bg-surface));
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+    }
+
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--amber);
+    }
+
+    .spotlight-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .spotlight-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--amber);
+      animation: pulseDot 1.5s infinite;
+    }
+
+    .spotlight-title {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .spotlight-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      max-width: 480px;
+    }
+
+    /* Progress Ring Widget */
+    .progress-widget {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ring-box {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .ring-svg {
+      width: 80px;
+      height: 80px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: var(--border-subtle);
+      stroke-width: 7;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke: var(--emerald);
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-dasharray: 226;
+      stroke-dashoffset: 226;
+      transition: stroke-dashoffset 0.6s var(--transition-smooth);
+    }
+
+    .ring-val {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .progress-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .progress-rank {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--emerald);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .progress-stats-txt {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .progress-sub-txt {
+      font-size: 12.5px;
+      color: var(--text-tertiary);
+    }
+
+    /* ==========================================================================
+       TOOLBAR: SEARCH & FILTERS
+       ========================================================================== */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 12px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+    .pill:hover {
+      color: var(--text-primary);
+      border-color: var(--border-accent);
+    }
+    .pill.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .search-wrap {
+      position: relative;
+      min-width: 260px;
+    }
+
+    .search-field {
+      width: 100%;
+      padding: 7px 38px 7px 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      font-size: 13.5px;
+      transition: border-color var(--transition-smooth);
+    }
+    .search-field:focus {
+      border-color: var(--blue);
+      outline: none;
+    }
+
+    .search-kbd {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--text-tertiary);
+      pointer-events: none;
+    }
+
+    .view-switch {
+      display: flex;
+      background: var(--bg-surface-elevated);
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .switch-btn {
+      padding: 5px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-smooth);
+    }
+    .switch-btn.active {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* ==========================================================================
+       VIEW 1: GRAPH VIEW (CONNECTED WIRE TREE)
+       ========================================================================== */
+    .graph-view-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 20px;
+      overflow-x: auto;
+      box-shadow: var(--shadow-glass);
+      min-height: 480px;
+    }
+
+    .graph-tiers-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    .tier-lbl {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .graph-stage {
+      position: relative;
+      width: 100%;
+      min-width: 820px;
+      height: 420px;
+    }
+
+    #svg-wires {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .wire-line {
+      fill: none;
+      stroke: var(--border-subtle);
+      stroke-width: 2;
+      stroke-dasharray: 6 4;
+      transition: stroke 0.3s;
+    }
+    .wire-line.unlocked {
+      stroke: var(--emerald);
+      stroke-dasharray: none;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
+    }
+
+    .tree-node {
+      position: absolute;
+      width: 230px;
+      padding: 12px 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all var(--transition-smooth);
+      z-index: 2;
+      user-select: none;
+    }
+
+    .tree-node:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      z-index: 5;
+    }
+
+    .tree-node.ready {
+      border-color: var(--amber);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+    }
+
+    .tree-node.done {
+      border-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.08);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+    }
+
+    .tree-node.locked {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .node-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(59, 130, 246, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+
+    .node-meta {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .node-name {
+      font-weight: 700;
+      font-size: 13.5px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .node-status-txt {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       VIEW 2: CARD MATRIX
+       ========================================================================== */
+    .card-matrix {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .matrix-tier {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .matrix-tier-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .matrix-tier-name {
+      font-size: 17px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tier-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--blue);
+      border: 1px solid var(--border-accent);
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .matrix-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 580px) {
+      .matrix-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .skill-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+
+    .skill-box:hover {
+      background: var(--bg-surface-elevated);
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .skill-box.ready {
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+    }
+
+    .skill-box.done {
+      border-color: var(--emerald);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05), var(--bg-surface));
+    }
+
+    .skill-box.locked {
+      opacity: 0.6;
+    }
+
+    .box-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .box-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--bg-surface-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .box-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-ready {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .badge-done {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .badge-locked {
+      background: rgba(100, 116, 139, 0.15);
+      color: var(--text-tertiary);
+      border: 1px solid rgba(100, 116, 139, 0.3);
+    }
+
+    .box-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .box-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+
+    .box-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .box-action {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       SIDE PANEL INSPECTOR (SLIDE DRAWER)
+       ========================================================================== */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-smooth);
+    }
+    .drawer-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .drawer-dialog {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-accent);
+      box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
+      transform: translateX(100%);
+      transition: transform var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 201;
+    }
+    .drawer-overlay.open .drawer-dialog {
+      transform: translateX(0);
+    }
+
+    .drawer-top {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--bg-surface-elevated);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .drawer-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .drawer-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .drawer-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .why-callout {
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid var(--blue);
+      padding: 14px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .prereqs-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .prereq-btn {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-primary);
+    }
+    .prereq-btn:hover {
+      border-color: var(--blue);
+    }
+
+    .resource-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all var(--transition-smooth);
+    }
+    .resource-card:hover {
+      border-color: var(--blue);
+      transform: translateX(4px);
+    }
+
+    .project-card {
+      background: var(--bg-surface-elevated);
+      border: 1px dashed var(--border-accent);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .project-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .drawer-actions {
+      padding: 20px 24px;
+      background: var(--bg-surface-elevated);
+      border-top: 1px solid var(--border-subtle);
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    /* ==========================================================================
+       MODALS: ABOUT (JUDGE CASE STUDY) & TROPHIES
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 210;
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: all var(--transition-smooth);
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-window {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 660px;
+      max-height: 85vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-surface-elevated);
+    }
+
+    .modal-h2 {
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .modal-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .case-box {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .case-lbl {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    /* Badges */
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 540px) {
+      .badge-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .trophy-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .trophy-card.unlocked {
+      border-color: var(--emerald);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    }
+    .trophy-card.locked {
+      opacity: 0.5;
+      filter: grayscale(1);
+    }
+
+    .trophy-icon {
+      font-size: 26px;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 28px 24px;
+      margin-top: 60px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+  </style>
 </head>
-<body>
-<div class="wrap">
-  <div class="hud">
-    <span>Score <b id="score">0</b></span>
-    <span>Best <b id="best">0</b></span>
+<body data-theme="dark">
+
+  <!-- Ambient Glows -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+  <div class="bg-grid"></div>
+
+  <!-- ==========================================================================
+       NAVIGATION
+       ========================================================================== -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container nav-inner">
+      <div class="brand" onclick="switchBranch('cse')" role="button" tabindex="0">
+        <div class="brand-symbol">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <span>CHOOSE.YOUR.ROADMAP</span>
+          <span class="brand-pill">PREMIUM 2026</span>
+        </div>
+      </div>
+
+      <div class="nav-controls">
+        <!-- Export / Download Checklist -->
+        <button class="btn btn-glass" onclick="exportChecklist()" title="Export Roadmap Checklist">
+          <span>📥 Export Plan</span>
+        </button>
+
+        <!-- Trophies -->
+        <button class="btn btn-glass" onclick="openModal('modal-trophies')" title="Unlocked Badges">
+          <span>🏆 Badges</span>
+          <span id="badge-pill" style="font-family: var(--font-mono); font-size: 11px; background: var(--blue); color: #fff; padding: 1px 7px; border-radius: 10px; margin-left: 4px;">0/5</span>
+        </button>
+
+        <!-- Case Study for Judges -->
+        <button class="btn btn-primary" onclick="openModal('modal-judges')" title="Case Study for Judges">
+          <span>⚡ Case Study</span>
+        </button>
+
+        <!-- Audio Toggle -->
+        <button class="btn-icon" id="audio-btn" onclick="toggleAudio()" title="Sound Effects" aria-label="Toggle Sound">
+          <span id="audio-icon">🔊</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button class="btn-icon" id="theme-btn" onclick="toggleTheme()" title="Switch Light/Dark" aria-label="Toggle Theme">
+          <span id="theme-icon">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ==========================================================================
+         HERO SECTION: 3D INTERACTIVE MATRIX
+         ========================================================================== -->
+    <header class="hero">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          <span>ENGINEERING CURRICULUM ARCHITECTURE</span>
+        </div>
+        <h1 class="hero-h1">
+          Architect Your Engineering Career, <span class="gradient">Node by Node.</span>
+        </h1>
+        <p class="hero-lead">
+          Eliminate tutorial paralysis. Traverse prerequisites with our 3D interactive matrix, master verified free curricula, and build portfolio projects that impress tech recruiters.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">4</span>
+            <span class="stat-lbl">Disciplines</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">36</span>
+            <span class="stat-lbl">Verified Milestones</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" style="color: var(--emerald);">100%</span>
+            <span class="stat-lbl">Free Curated Tech</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Interactive Three.js Viewport -->
+      <div class="canvas-card" aria-label="3D Interactive Engineering Skill Matrix">
+        <div class="canvas-hud">
+          <span class="hud-tag">3D ISOMETRIC MATRIX</span>
+          <span class="hud-tag" id="hud-branch-tag">CSE // ACTIVE</span>
+        </div>
+        <canvas id="three-viewport"></canvas>
+        <div class="hud-tip">Hover or drag to tilt in 3D • Click any node to inspect</div>
+      </div>
+    </header>
+
+    <!-- ==========================================================================
+       BRANCH SELECTOR
+       ========================================================================== -->
+    <section class="branch-nav-wrap">
+      <div class="branch-nav-label">Select Engineering Specialization</div>
+      <div class="branch-cards" role="tablist">
+        <div class="branch-card active" id="tab-cse" onclick="switchBranch('cse')" role="tab" tabindex="0">
+          <div class="branch-icon-box">💻</div>
+          <div class="branch-info">
+            <span class="branch-name">Computer Science</span>
+            <span class="branch-sub" id="sub-cse">0 / 9 Milestones</span>
+          </div>
+        </div>
+
+        <div class="branch-card" id="tab-ai" onclick="switchBranch('ai')" role="tab" tabindex="0">
+          <div class="branch-icon-box">🤖</div>
+          <div class="branch-info">
+            <span class="branch-name">AI / Machine Learning</span>
+            <span class="branch-sub" id="sub-ai">0 / 9 Milestones</span>
+          </div>
+        </div>
+
+        <div class="branch-card" id="tab-ds" onclick="switchBranch('ds')" role="tab" tabindex="0">
+          <div class="branch-icon-box">📊</div>
+          <div class="branch-info">
+            <span class="branch-name">Data Science</span>
+            <span class="branch-sub" id="sub-ds">0 / 9 Milestones</span>
+          </div>
+        </div>
+
+        <div class="branch-card" id="tab-sec" onclick="switchBranch('sec')" role="tab" tabindex="0">
+          <div class="branch-icon-box">🛡️</div>
+          <div class="branch-info">
+            <span class="branch-name">Cyber Security</span>
+            <span class="branch-sub" id="sub-sec">0 / 9 Milestones</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+       DASHBOARD HUD: SPOTLIGHT & PROGRESS RING
+       ========================================================================== -->
+    <section class="dashboard-hud">
+      <!-- Next Target Spotlight -->
+      <article class="spotlight-card" id="spotlight-box">
+        <div>
+          <div class="spotlight-badge">
+            <span class="spotlight-pulse"></span>
+            <span>Recommended Next Target</span>
+          </div>
+          <h2 class="spotlight-title" id="spotlight-title">Programming Fundamentals</h2>
+          <p class="spotlight-desc" id="spotlight-desc">Master C/C++ memory management and low-level constructs to unlock the entire foundation tier.</p>
+        </div>
+        <button class="btn btn-primary" id="spotlight-btn" onclick="openCurrentTarget()">
+          <span>Inspect Node →</span>
+        </button>
+      </article>
+
+      <!-- Circular Progress Ring Widget -->
+      <aside class="progress-widget" aria-label="Current Branch Progress">
+        <div class="ring-box">
+          <svg class="ring-svg" viewBox="0 0 80 80">
+            <circle class="ring-track" cx="40" cy="40" r="36" />
+            <circle class="ring-fill" id="ring-fill-bar" cx="40" cy="40" r="36" />
+          </svg>
+          <div class="ring-val" id="ring-pct-txt">0%</div>
+        </div>
+        <div class="progress-meta">
+          <span class="progress-rank" id="progress-rank-badge">Apprentice Engineer</span>
+          <span class="progress-stats-txt" id="progress-count-txt">0 of 9 Done</span>
+          <span class="progress-sub-txt" id="progress-hours-txt">Est. 380 Hours Total</span>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ==========================================================================
+       TOOLBAR: SEARCH, FILTERS & VIEW MODE
+       ========================================================================== -->
+    <section class="toolbar">
+      <div class="filter-pills" role="group">
+        <button class="pill active" onclick="setFilter('all', this)">All (9)</button>
+        <button class="pill" onclick="setFilter('ready', this)">⚡ Ready to Start</button>
+        <button class="pill" onclick="setFilter('done', this)">✅ Completed</button>
+        <button class="pill" onclick="setFilter('locked', this)">🔒 Locked</button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <!-- Search -->
+        <div class="search-wrap">
+          <input type="text" class="search-field" id="search-input" placeholder="Search skills, topics, tools..." oninput="handleSearch(this.value)" aria-label="Search skills">
+          <span class="search-kbd">Ctrl+K</span>
+        </div>
+
+        <!-- View Switcher -->
+        <div class="view-switch" role="radiogroup">
+          <button class="switch-btn active" id="btn-view-graph" onclick="switchView('graph')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span>Graph View</span>
+          </button>
+          <button class="switch-btn" id="btn-view-matrix" onclick="switchView('matrix')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Card View</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+       VIEW 1: GRAPH VIEW (INTERACTIVE SVG WIRES)
+       ========================================================================== -->
+    <div id="view-graph" class="graph-view-card">
+      <div class="graph-tiers-bar">
+        <span class="tier-lbl">Tier 01: Foundation</span>
+        <span class="tier-lbl">Tier 02: Core Systems</span>
+        <span class="tier-lbl">Tier 03: Advanced Mastery</span>
+      </div>
+      <div class="graph-stage" id="graph-stage">
+        <svg id="svg-wires" aria-hidden="true"></svg>
+        <!-- Nodes populated via JS -->
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+       VIEW 2: CARD MATRIX VIEW
+       ========================================================================== -->
+    <div id="view-matrix" class="card-matrix" style="display: none;">
+      <!-- Tier 1 -->
+      <div class="matrix-tier">
+        <div class="matrix-tier-hdr">
+          <div class="matrix-tier-name">
+            <span class="tier-chip">LEVEL 01</span>
+            <span>Foundation & Core Principles</span>
+          </div>
+          <span class="tier-chip" id="t1-progress-badge">0 / 3 Done</span>
+        </div>
+        <div class="matrix-grid" id="tier-1-grid"></div>
+      </div>
+
+      <!-- Tier 2 -->
+      <div class="matrix-tier">
+        <div class="matrix-tier-hdr">
+          <div class="matrix-tier-name">
+            <span class="tier-chip">LEVEL 02</span>
+            <span>System Architecture & Engineering</span>
+          </div>
+          <span class="tier-chip" id="t2-progress-badge">0 / 3 Done</span>
+        </div>
+        <div class="matrix-grid" id="tier-2-grid"></div>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="matrix-tier">
+        <div class="matrix-tier-hdr">
+          <div class="matrix-tier-name">
+            <span class="tier-chip">LEVEL 03</span>
+            <span>Advanced Specialization & Scale</span>
+          </div>
+          <span class="tier-chip" id="t3-progress-badge">0 / 3 Done</span>
+        </div>
+        <div class="matrix-grid" id="tier-3-grid"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       SIDE PANEL INSPECTOR
+       ========================================================================== -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawerBackdrop(event)">
+    <aside class="drawer-dialog" role="dialog" aria-modal="true" aria-labelledby="d-title">
+      <div class="drawer-top">
+        <div>
+          <span class="tier-chip" id="d-tier-chip">LEVEL 01 // FOUNDATION</span>
+          <h2 class="drawer-title" id="d-title">Skill Title</h2>
+        </div>
+        <button class="btn-icon" onclick="closeDrawerDirect()" aria-label="Close Inspector">✕</button>
+      </div>
+
+      <div class="drawer-content">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="box-badge badge-ready" id="d-status-pill">READY TO START</span>
+          <span style="font-family: var(--font-mono); font-size: 13px; color: var(--text-tertiary);" id="d-time-txt">⏱ 40 Hours Required</span>
+        </div>
+
+        <div>
+          <div class="drawer-label">Description</div>
+          <p id="d-desc" style="color: var(--text-secondary); font-size: 14.5px;"></p>
+        </div>
+
+        <div>
+          <div class="drawer-label">Why It Matters to Engineers</div>
+          <div class="why-callout" id="d-why"></div>
+        </div>
+
+        <div>
+          <div class="drawer-label">Prerequisites</div>
+          <div class="prereqs-chips" id="d-prereqs"></div>
+        </div>
+
+        <div>
+          <div class="drawer-label">Curated Free Resources</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;" id="d-resources"></div>
+        </div>
+
+        <div>
+          <div class="drawer-label">Hands-On Mini Project</div>
+          <div class="project-card">
+            <div class="project-card-title" id="d-proj-title">Project Title</div>
+            <p id="d-proj-desc" style="font-size: 13.5px; color: var(--text-secondary);"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-actions">
+        <button class="btn btn-glass" onclick="closeDrawerDirect()">Back to Map</button>
+        <button class="btn btn-primary" id="d-action-btn" onclick="toggleActiveSkill()">
+          <span>Mark as Completed ✅</span>
+        </button>
+      </div>
+    </aside>
   </div>
 
-  <div class="board">
-    <canvas id="game" width="440" height="440"></canvas>
-    <div class="overlay" id="overlay">
-      <h1 id="ovTitle">SNAKE</h1>
-      <p id="ovText"></p>
-      <button id="ovBtn">Start</button>
+  <!-- ==========================================================================
+       MODAL: JUDGES CASE STUDY
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-judges" onclick="closeModalBackdrop(event, 'modal-judges')">
+    <div class="modal-window" role="dialog" aria-labelledby="judges-title">
+      <div class="modal-head">
+        <h2 class="modal-h2" id="judges-title">📋 Engineering UI/UX Case Study</h2>
+        <button class="btn-icon" onclick="closeModal('modal-judges')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          <strong>CHOOSE.YOUR.ROADMAP</strong> solves undergraduate engineering tutorial paralysis through a structured, visual dependency curriculum.
+        </p>
+
+        <div class="case-grid">
+          <div class="case-box">
+            <div class="case-lbl">01 // Problem Statement</div>
+            <p style="font-size: 13px; color: var(--text-secondary);">
+              Static PNG roadmaps induce cognitive overload. Students get trapped in tutorials without understanding prerequisite dependency or building genuine systems.
+            </p>
+          </div>
+
+          <div class="case-box">
+            <div class="case-lbl">02 // Target Persona</div>
+            <p style="font-size: 13px; color: var(--text-secondary);">
+              First-year engineering students wanting a clear, structured learning roadmap with verified free resources and verifiable portfolio projects.
+            </p>
+          </div>
+
+          <div class="case-box">
+            <div class="case-lbl">03 // Design Decisions</div>
+            <p style="font-size: 13px; color: var(--text-secondary);">
+              Vercel/Linear-inspired dark glassmorphism, 14px card radius, 8px layout rhythm, WCAG AA contrast, and a Three.js 3D isometric interactive matrix.
+            </p>
+          </div>
+
+          <div class="case-box">
+            <div class="case-lbl">04 // Zero-Dependency Stack</div>
+            <p style="font-size: 13px; color: var(--text-secondary);">
+              Pure frontend: vanilla HTML, CSS, JavaScript, Web Audio synthesizer, and native SVG wire algorithms. 100% static GitHub Pages compatible.
+            </p>
+          </div>
+        </div>
+
+        <div class="case-box">
+          <div class="case-lbl">05 // Accessibility & UX Delights</div>
+          <p style="font-size: 13px; color: var(--text-secondary);">
+            Full keyboard navigation (<code>Ctrl+K</code> or <code>/</code> to search, <code>Esc</code> to dismiss), visible focus rings, Web Audio SFX, celebration confetti, and localStorage persistence.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="hint">← ↑ → ↓ / WASD &nbsp;·&nbsp; space = restart</div>
-</div>
+  <!-- ==========================================================================
+       MODAL: TROPHIES
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-trophies" onclick="closeModalBackdrop(event, 'modal-trophies')">
+    <div class="modal-window" role="dialog" aria-labelledby="trophies-title">
+      <div class="modal-head">
+        <h2 class="modal-h2" id="trophies-title">🏆 Engineering Badges</h2>
+        <button class="btn-icon" onclick="closeModal('modal-trophies')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 13.5px;">
+          Badges unlock automatically as you conquer prerequisites and complete milestones across disciplines.
+        </p>
+        <div class="badge-grid" id="trophies-list"></div>
+      </div>
+    </div>
+  </div>
 
-<script>
-(() => {
-  'use strict';
+  <footer class="footer">
+    <div>CHOOSE.YOUR.ROADMAP // DESIGNED FOR THE ENGINEERING COMPETITION</div>
+    <div style="margin-top: 4px; color: var(--text-tertiary);">Static GitHub Pages Ready • Pure Frontend Engineering</div>
+  </footer>
 
-  const canvas  = document.getElementById('game');
-  const ctx     = canvas.getContext('2d');
-  const overlay = document.getElementById('overlay');
-  const ovTitle = document.getElementById('ovTitle');
-  const ovText  = document.getElementById('ovText');
-  const ovBtn   = document.getElementById('ovBtn');
-  const scoreEl = document.getElementById('score');
-  const bestEl  = document.getElementById('best');
+  <!-- ==========================================================================
+       APPLICATION LOGIC & DATA
+       ========================================================================== */
+  -->
+  <script>
+    const DATA = {
+      cse: {
+        name: "Computer Science (CSE)",
+        icon: "💻",
+        estHoursTotal: 380,
+        skills: [
+          {
+            id: "cse-1",
+            level: 1,
+            name: "Programming Fundamentals & Memory",
+            icon: "⚡",
+            timeEst: "40 hrs",
+            whyItMatters: "High-level languages hide pointers and cache behavior. Mastering memory management in C/C++ prevents subtle runtime vulnerabilities.",
+            description: "Pointers, stack vs heap allocation, reference semantics, and compilation lifecycle.",
+            prerequisites: [],
+            resources: [
+              { name: "Harvard CS50x (Free Complete Course)", type: "Video Lectures", url: "https://cs50.harvard.edu/x/" },
+              { name: "C Programming Bootcamp (freeCodeCamp)", type: "Hands-on Code", url: "https://www.youtube.com/watch?v=KJgsSFOSQv0" }
+            ],
+            miniProject: {
+              title: "Dynamic Array & Memory Pool",
+              desc: "Build a custom dynamic array in C with automated resize semantics and Valgrind memory leak verification."
+            }
+          },
+          {
+            id: "cse-2",
+            level: 1,
+            name: "Data Structures & Complexity",
+            icon: "🌲",
+            timeEst: "50 hrs",
+            whyItMatters: "Software trades space against time. Choosing the right data structure separates script writers from genuine systems engineers.",
+            description: "Big-O analysis, balanced BSTs, heaps, hash maps, graph traversals (BFS/DFS), and dynamic programming.",
+            prerequisites: ["cse-1"],
+            resources: [
+              { name: "NeetCode Interactive Roadmap", type: "Interactive Guide", url: "https://neetcode.io/roadmap" },
+              { name: "MIT 6.006: Intro to Algorithms", type: "Lecture Series", url: "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/" }
+            ],
+            miniProject: {
+              title: "Pathfinding Visualizer",
+              desc: "Build an interactive grid visualizing Dijkstra and A* pathfinding algorithms across obstacles."
+            }
+          },
+          {
+            id: "cse-3",
+            level: 1,
+            name: "Computer Architecture & Organization",
+            icon: "🎛️",
+            timeEst: "35 hrs",
+            whyItMatters: "Understanding logic gates, registers, and pipelining explains why cache locality dictates real execution speed.",
+            description: "ALU architecture, CPU registers, assembly language, and memory caching hierarchies.",
+            prerequisites: ["cse-1"],
+            resources: [
+              { name: "From NAND to Tetris", type: "Hardware Course", url: "https://www.nand2tetris.org/" },
+              { name: "CrashCourse Computer Science", type: "Video Series", url: "https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo" }
+            ],
+            miniProject: {
+              title: "8-Bit Virtual CPU Emulator",
+              desc: "Write an emulator executing basic arithmetic and conditional jump operations."
+            }
+          },
+          {
+            id: "cse-4",
+            level: 2,
+            name: "Operating Systems & Concurrency",
+            icon: "⚙️",
+            timeEst: "45 hrs",
+            whyItMatters: "Multicore processors demand mutexes, virtual memory, and context switches to prevent race conditions and deadlocks.",
+            description: "Processes, threads, POSIX system calls, virtual memory paging, scheduling, and synchronization.",
+            prerequisites: ["cse-2", "cse-3"],
+            resources: [
+              { name: "Operating Systems: Three Easy Pieces", type: "Free Book", url: "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+              { name: "CMU 15-213: Computer Systems", type: "Course Material", url: "https://www.cs.cmu.edu/~213/" }
+            ],
+            miniProject: {
+              title: "Multithreaded Task Queue",
+              desc: "Implement a thread-safe worker pool in C with condition variables and mutex locking."
+            }
+          },
+          {
+            id: "cse-5",
+            level: 2,
+            name: "Database Systems & Storage Engines",
+            icon: "🗄️",
+            timeEst: "40 hrs",
+            whyItMatters: "ACID guarantees, B-Trees, and write-ahead logs dictate scalable persistence for enterprise systems.",
+            description: "Relational data modeling, SQL indexing internals, transaction isolation, and query plans.",
+            prerequisites: ["cse-2"],
+            resources: [
+              { name: "CMU 15-445: Database Systems", type: "Video Lectures", url: "https://15445.courses.cs.cmu.edu/" },
+              { name: "Use The Index, Luke!", type: "SQL Guide", url: "https://use-the-index-luke.com/" }
+            ],
+            miniProject: {
+              title: "B-Tree Key-Value Engine",
+              desc: "Build an append-only disk-backed key-value store with in-memory sparse index lookups."
+            }
+          },
+          {
+            id: "cse-6",
+            level: 2,
+            name: "Computer Networking & Protocols",
+            icon: "🌐",
+            timeEst: "35 hrs",
+            whyItMatters: "All cloud applications depend on the TCP/IP stack. Understanding sockets, TLS, and HTTP/3 is mandatory.",
+            description: "OSI model, DNS, TCP congestion control, UDP, WebSockets, and packet encapsulation.",
+            prerequisites: ["cse-4"],
+            resources: [
+              { name: "Stanford CS144: Computer Networks", type: "Course Syllabus", url: "https://cs144.github.io/" },
+              { name: "Wireshark Packet Analysis Labs", type: "Hands-on Guide", url: "https://www.wireshark.org/docs/" }
+            ],
+            miniProject: {
+              title: "RFC HTTP/1.1 Server from Scratch",
+              desc: "Create an HTTP server using raw TCP sockets supporting keep-alive and static file routing."
+            }
+          },
+          {
+            id: "cse-7",
+            level: 3,
+            name: "Distributed Systems & Cloud Architecture",
+            icon: "☁️",
+            timeEst: "50 hrs",
+            whyItMatters: "Single servers fail. Consensus protocols (Raft, Paxos) and CAP theorem power fault-tolerant cloud platforms.",
+            description: "Raft consensus, replication, sharding, event-driven architectures, and microservices.",
+            prerequisites: ["cse-4", "cse-6"],
+            resources: [
+              { name: "MIT 6.824: Distributed Systems", type: "MIT Lectures", url: "https://pdos.csail.mit.edu/6.824/" },
+              { name: "Designing Data-Intensive Applications", type: "Architecture Reference", url: "https://github.com/ept/ddia-references" }
+            ],
+            miniProject: {
+              title: "Distributed Raft Consensus Node",
+              desc: "Build a leader election and log replication simulator with heartbeat timers."
+            }
+          },
+          {
+            id: "cse-8",
+            level: 3,
+            name: "Compiler Design & Language Engineering",
+            icon: "🔍",
+            timeEst: "45 hrs",
+            whyItMatters: "Building a compiler demystifies how code becomes machine execution through abstract syntax trees.",
+            description: "Lexing, recursive descent parsing, symbol tables, bytecode, and LLVM intermediate representation.",
+            prerequisites: ["cse-2", "cse-4"],
+            resources: [
+              { name: "Crafting Interpreters", type: "Complete Digital Book", url: "https://craftinginterpreters.com/" },
+              { name: "Stanford CS143: Compilers", type: "Course Material", url: "https://web.stanford.edu/class/cs143/" }
+            ],
+            miniProject: {
+              title: "Tree-Walk Scripting Interpreter",
+              desc: "Create a calculator scripting language that parses variables, expressions, and loops."
+            }
+          },
+          {
+            id: "cse-9",
+            level: 3,
+            name: "High-Performance Computing & Systems",
+            icon: "🚀",
+            timeEst: "45 hrs",
+            whyItMatters: "Achieving ultra-low latency requires SIMD vectorization, cache-line alignment, and lock-free structures.",
+            description: "SIMD, cache-oblivious algorithms, GPU compute (CUDA), and lock-free queues.",
+            prerequisites: ["cse-7"],
+            resources: [
+              { name: "Computer Systems: CS:APP Labs", type: "Code Labs", url: "http://csapp.cs.cmu.edu/" },
+              { name: "CppCon Performance Talks", type: "Engineering Videos", url: "https://www.youtube.com/@CppCon" }
+            ],
+            miniProject: {
+              title: "Lock-Free SPSC Ring Buffer",
+              desc: "Build a high-throughput lock-free Single Producer Single Consumer queue benchmarking millions of ops/sec."
+            }
+          }
+        ]
+      },
 
-  const COLS = 20, ROWS = 20, CELL = canvas.width / COLS; // 22px
-  const BASE_STEP = 135, MIN_STEP = 65;                   // ms per move
-  const BEST_KEY = 'snake.best.v1';
+      ai: {
+        name: "AI & Machine Learning",
+        icon: "🤖",
+        estHoursTotal: 390,
+        skills: [
+          {
+            id: "ai-1",
+            level: 1,
+            name: "Mathematical Foundations for ML",
+            icon: "📐",
+            timeEst: "45 hrs",
+            whyItMatters: "Machine learning is applied linear algebra and calculus. Loss gradients and vector projections govern all models.",
+            description: "Matrices, eigenvalues, partial derivatives, chain rule, and probability distributions.",
+            prerequisites: [],
+            resources: [
+              { name: "3Blue1Brown: Linear Algebra", type: "Visual Animations", url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" },
+              { name: "Mathematics for ML (Imperial)", type: "Coursera Free", url: "https://www.coursera.org/specializations/mathematics-machine-learning" }
+            ],
+            miniProject: {
+              title: "Gradient Descent from Scratch",
+              desc: "Code linear regression using pure Python without external math libraries."
+            }
+          },
+          {
+            id: "ai-2",
+            level: 1,
+            name: "Scientific Computing with Python",
+            icon: "🐍",
+            timeEst: "35 hrs",
+            whyItMatters: "NumPy and Pandas provide vectorized operations at compiled C speed, powering data manipulation.",
+            description: "N-dimensional arrays, vectorization, Pandas DataFrames, and data cleaning.",
+            prerequisites: ["ai-1"],
+            resources: [
+              { name: "freeCodeCamp Python for Data Analysis", type: "Certification", url: "https://www.freecodecamp.org/learn/data-analysis-with-python/" },
+              { name: "Python Data Science Handbook", type: "Free GitHub Book", url: "https://jakevdp.github.io/PythonDataScienceHandbook/" }
+            ],
+            miniProject: {
+              title: "Automated Data Cleaning Toolkit",
+              desc: "Build an automated script that cleans missing records and outputs correlation matrices."
+            }
+          },
+          {
+            id: "ai-3",
+            level: 1,
+            name: "Classical Machine Learning",
+            icon: "🌲",
+            timeEst: "40 hrs",
+            whyItMatters: "Before deploying heavy deep nets, Random Forests and XGBoost solve 80% of business problems at low cost.",
+            description: "Supervised and unsupervised learning, decision trees, k-means, SVMs, and cross-validation.",
+            prerequisites: ["ai-2"],
+            resources: [
+              { name: "Stanford CS229: Machine Learning", type: "Video Lectures", url: "https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU" },
+              { name: "Scikit-Learn Guide", type: "Official Docs", url: "https://scikit-learn.org/stable/user_guide.html" }
+            ],
+            miniProject: {
+              title: "Credit Risk Classifier with XGBoost",
+              desc: "Train an ensemble classifier with ROC-AUC metric tuning and feature importance graphs."
+            }
+          },
+          {
+            id: "ai-4",
+            level: 2,
+            name: "Deep Learning & Neural Architectures",
+            icon: "🧠",
+            timeEst: "50 hrs",
+            whyItMatters: "Deep learning powers vision, speech, and reasoning. Learning PyTorch tensor operations is fundamental.",
+            description: "Backpropagation, activation functions, CNNs for vision, RNNs, and PyTorch tensors.",
+            prerequisites: ["ai-3"],
+            resources: [
+              { name: "Fast.ai: Practical Deep Learning", type: "Hands-on Course", url: "https://course.fast.ai/" },
+              { name: "MIT 6.S191: Deep Learning", type: "Lecture Videos", url: "http://introtodeeplearning.com/" }
+            ],
+            miniProject: {
+              title: "Custom PyTorch ConvNet Classifier",
+              desc: "Build and train a Convolutional Neural Network on CIFAR-10 with dropout regularization."
+            }
+          },
+          {
+            id: "ai-5",
+            level: 2,
+            name: "NLP & Transformer Architectures",
+            icon: "💬",
+            timeEst: "45 hrs",
+            whyItMatters: "Self-attention in Transformers revolutionized AI. Knowing tokenization and attention weights is essential.",
+            description: "Tokenizers, Self-Attention mechanism, Transformer encoders/decoders (BERT, GPT), and Hugging Face.",
+            prerequisites: ["ai-4"],
+            resources: [
+              { name: "Stanford CS224N: NLP with Deep Learning", type: "Course Material", url: "https://web.stanford.edu/class/cs224n/" },
+              { name: "Hugging Face NLP Course", type: "Interactive Labs", url: "https://huggingface.co/learn/nlp-course" }
+            ],
+            miniProject: {
+              title: "Semantic Vector Search Engine",
+              desc: "Build a document retrieval tool using dense vector embeddings and cosine similarity."
+            }
+          },
+          {
+            id: "ai-6",
+            level: 2,
+            name: "Computer Vision & Generative AI",
+            icon: "👁️",
+            timeEst: "40 hrs",
+            whyItMatters: "Vision AI drives medical scanning and autonomous navigation. Master object detection and latent diffusion.",
+            description: "Feature pyramids, YOLO real-time detection, image segmentation, and Diffusion models.",
+            prerequisites: ["ai-4"],
+            resources: [
+              { name: "Stanford CS231N: Vision Deep Learning", type: "Course Material", url: "https://cs231n.github.io/" },
+              { name: "OpenCV Python Complete Hub", type: "Tutorial Series", url: "https://opencv.org/university/free-opencv-course/" }
+            ],
+            miniProject: {
+              title: "Real-Time Object Detector",
+              desc: "Deploy a lightweight YOLO model inside a webcam interface detecting common objects."
+            }
+          },
+          {
+            id: "ai-7",
+            level: 3,
+            name: "Reinforcement Learning & Agents",
+            icon: "🕹️",
+            timeEst: "45 hrs",
+            whyItMatters: "RL trains systems to make sequences of decisions under uncertainty, powering robotics and RLHF for LLMs.",
+            description: "Markov Decision Processes, Q-Learning, DQN, Policy Gradients (PPO), and reward engineering.",
+            prerequisites: ["ai-4"],
+            resources: [
+              { name: "Deep RL Course (Hugging Face)", type: "Certification", url: "https://huggingface.co/deep-rl-course" },
+              { name: "Spinning Up in Deep RL (OpenAI)", type: "Code Framework", url: "https://spinningup.openai.com/" }
+            ],
+            miniProject: {
+              title: "Autonomous Maze Agent",
+              desc: "Train an agent to navigate dynamic obstacle mazes using Q-learning."
+            }
+          },
+          {
+            id: "ai-8",
+            level: 3,
+            name: "MLOps & Model Deployment",
+            icon: "🚢",
+            timeEst: "45 hrs",
+            whyItMatters: "A model in a notebook creates zero value. Production ML requires Docker containers, drift tracking, and low-latency APIs.",
+            description: "FastAPI inference, Docker containers, MLflow experiment tracking, and CI/CD pipelines.",
+            prerequisites: ["ai-5"],
+            resources: [
+              { name: "Made With ML (Production MLOps)", type: "Full Course", url: "https://madewithml.com/" },
+              { name: "Full Stack Deep Learning", type: "Video Series", url: "https://fullstackdeeplearning.com/" }
+            ],
+            miniProject: {
+              title: "Dockerized Inference API",
+              desc: "Build a model endpoint with Prometheus health monitoring and latency tracking."
+            }
+          },
+          {
+            id: "ai-9",
+            level: 3,
+            name: "LLM Fine-Tuning & Production RAG",
+            icon: "✨",
+            timeEst: "50 hrs",
+            whyItMatters: "Enterprise AI relies on grounding foundation models with proprietary data via RAG and LoRA fine-tuning.",
+            description: "LoRA parameter-efficient tuning, vector databases (Chroma, Milvus), chunking, and LangChain.",
+            prerequisites: ["ai-5", "ai-8"],
+            resources: [
+              { name: "DeepLearning.AI: RAG Short Courses", type: "Interactive Lessons", url: "https://www.deeplearning.ai/short-courses/" },
+              { name: "Pinecone Vector Learning Hub", type: "Tutorials", url: "https://www.pinecone.io/learn/" }
+            ],
+            miniProject: {
+              title: "Technical Spec QA RAG Bot",
+              desc: "Build a retrieval pipeline over PDF documentation with hybrid semantic search and citations."
+            }
+          }
+        ]
+      },
 
-  let snake, dir, queue, food, score, stepMs, state, acc, last;
-  let best = 0;
-  try { best = parseInt(localStorage.getItem(BEST_KEY), 10) || 0; } catch (e) {}
+      ds: {
+        name: "Data Science",
+        icon: "📊",
+        estHoursTotal: 360,
+        skills: [
+          {
+            id: "ds-1",
+            level: 1,
+            name: "Applied Statistics & Probability",
+            icon: "🎲",
+            timeEst: "40 hrs",
+            whyItMatters: "Hypothesis testing and probability prevent drawing flawed business conclusions from random noise.",
+            description: "Central Limit Theorem, confidence intervals, p-values, hypothesis tests, and Bayes' theorem.",
+            prerequisites: [],
+            resources: [
+              { name: "Khan Academy: Statistics", type: "Interactive Practice", url: "https://www.khanacademy.org/math/statistics-probability" },
+              { name: "StatQuest with Josh Starmer", type: "Intuitive Videos", url: "https://www.youtube.com/@statquest" }
+            ],
+            miniProject: {
+              title: "A/B Testing Significance Calculator",
+              desc: "Write an automated script evaluating web conversion tests with two-tailed t-test validation."
+            }
+          },
+          {
+            id: "ds-2",
+            level: 1,
+            name: "Data Wrangling & Cleaning",
+            icon: "🧹",
+            timeEst: "35 hrs",
+            whyItMatters: "Real data is corrupt and messy. 80% of data work is converting raw tables into clean representations.",
+            description: "Missing value imputation, date/time normalization, regex extraction, and anomaly filtering.",
+            prerequisites: ["ds-1"],
+            resources: [
+              { name: "Kaggle Data Cleaning Micro-Course", type: "Code Notebooks", url: "https://www.kaggle.com/learn/data-cleaning" },
+              { name: "Pandas Cookbook", type: "Recipes Guide", url: "https://pandas.pydata.org/docs/user_guide/cookbook.html" }
+            ],
+            miniProject: {
+              title: "Multi-Source Telecom Dataset Cleaner",
+              desc: "Consolidate 3 unstructured CSV datasets with duplicate records into an integrated SQLite table."
+            }
+          },
+          {
+            id: "ds-3",
+            level: 1,
+            name: "Relational Modeling & Advanced SQL",
+            icon: "💾",
+            timeEst: "35 hrs",
+            whyItMatters: "SQL is the universal language of business data. Window functions and query plans are mandatory skills.",
+            description: "Complex joins, CTEs, window functions (ROW_NUMBER, LAG, LEAD), and query optimization.",
+            prerequisites: ["ds-2"],
+            resources: [
+              { name: "Mode Analytics SQL Tutorial", type: "Interactive Platform", url: "https://mode.com/sql-tutorial/" },
+              { name: "SQLBolt: Interactive SQL", type: "Browser Practice", url: "https://sqlbolt.com/" }
+            ],
+            miniProject: {
+              title: "Customer Cohort Retention Analysis",
+              desc: "Write advanced SQL queries calculating monthly user retention, churn, and lifetime value."
+            }
+          },
+          {
+            id: "ds-4",
+            level: 2,
+            name: "Predictive Statistical Modeling",
+            icon: "📈",
+            timeEst: "45 hrs",
+            whyItMatters: "Moving from descriptive reporting to predictive forecasting unlocks massive operational leverage.",
+            description: "Ridge & Lasso regression, logistic regression, time-series forecasting (ARIMA), and survival analysis.",
+            prerequisites: ["ds-2", "ds-3"],
+            resources: [
+              { name: "Introduction to Statistical Learning (ISLR)", type: "Free Textbook", url: "https://www.statlearning.com/" },
+              { name: "Kaggle Time Series Course", type: "Interactive Labs", url: "https://www.kaggle.com/learn/time-series" }
+            ],
+            miniProject: {
+              title: "Hospital Readmission Predictor",
+              desc: "Build a calibrated logistic regression pipeline predicting 30-day patient readmissions."
+            }
+          },
+          {
+            id: "ds-5",
+            level: 2,
+            name: "Big Data Processing with Spark",
+            icon: "⚡",
+            timeEst: "45 hrs",
+            whyItMatters: "When datasets exceed single-machine RAM, distributed processing engines like Apache Spark are vital.",
+            description: "PySpark DataFrames, lazy execution, partition tuning, and distributed joins.",
+            prerequisites: ["ds-3"],
+            resources: [
+              { name: "Spark: The Definitive Guide Repo", type: "Code Labs", url: "https://github.com/databricks/Spark-The-Definitive-Guide" },
+              { name: "Databricks Community Edition", type: "Free Spark Cloud", url: "https://community.cloud.databricks.com/" }
+            ],
+            miniProject: {
+              title: "10-Million Row Flight Delay Aggregator",
+              desc: "Process multi-gigabyte flight datasets using PySpark computing on-time probabilities."
+            }
+          },
+          {
+            id: "ds-6",
+            level: 2,
+            name: "Data Storytelling & Dashboards",
+            icon: "🎨",
+            timeEst: "35 hrs",
+            whyItMatters: "Data without clear executive communication will be ignored. Visual hierarchy turns insights into decisions.",
+            description: "Visual design principles, Streamlit/Plotly dashboard development, and executive summaries.",
+            prerequisites: ["ds-2"],
+            resources: [
+              { name: "Storytelling with Data", type: "Design Guidelines", url: "https://www.storytellingwithdata.com/" },
+              { name: "Streamlit Docs Hub", type: "Framework Docs", url: "https://docs.streamlit.io/" }
+            ],
+            miniProject: {
+              title: "Interactive Climate Metric Dashboard",
+              desc: "Build an interactive web dashboard in Streamlit with filter sliders and map overlays."
+            }
+          },
+          {
+            id: "ds-7",
+            level: 3,
+            name: "Real-Time Streaming Analytics",
+            icon: "🌊",
+            timeEst: "45 hrs",
+            whyItMatters: "Fintech and logistics cannot wait for nightly batch runs; sensor streams must be processed in sub-second windows.",
+            description: "Apache Kafka message buses, sliding windows, watermarks, and stateful streams.",
+            prerequisites: ["ds-5"],
+            resources: [
+              { name: "Confluent Kafka Developer Course", type: "Free Training", url: "https://developer.confluent.io/courses/" },
+              { name: "Apache Flink Docs", type: "Stream Framework", url: "https://nightlies.apache.org/flink/flink-docs-stable/" }
+            ],
+            miniProject: {
+              title: "Live Stock Anomaly Alert Stream",
+              desc: "Simulate a live ticker stream in Kafka with sliding-window calculations alerting on sudden spikes."
+            }
+          },
+          {
+            id: "ds-8",
+            level: 3,
+            name: "Causal Inference & Experimentation",
+            icon: "🔬",
+            timeEst: "40 hrs",
+            whyItMatters: "Correlation is not causation. Causal graphs, propensity scores, and synthetic controls measure true impact.",
+            description: "Directed Acyclic Graphs (DAGs), propensity score matching, and difference-in-differences.",
+            prerequisites: ["ds-4"],
+            resources: [
+              { name: "Causal Inference for the Brave and True", type: "Online Book", url: "https://matheusfacure.github.io/python-causality-handbook/" },
+              { name: "Harvard Causal Inference Course", type: "Syllabus", url: "https://www.hsph.harvard.edu/causal/" }
+            ],
+            miniProject: {
+              title: "Marketing Campaign Uplift Modeler",
+              desc: "Determine genuine revenue lift of a promotion program using Propensity Score Matching."
+            }
+          },
+          {
+            id: "ds-9",
+            level: 3,
+            name: "Data Governance & Lineage with dbt",
+            icon: "🏛️",
+            timeEst: "40 hrs",
+            whyItMatters: "Enterprise data requires privacy compliance (GDPR), reproducible pipelines, and automated testing.",
+            description: "Data build tool (dbt), schema testing, data catalogs, and lineage tracking.",
+            prerequisites: ["ds-7"],
+            resources: [
+              { name: "dbt Learn Free Tutorials", type: "Modern Stack", url: "https://courses.getdbt.com/" },
+              { name: "Great Expectations Docs", type: "Testing Framework", url: "https://docs.greatexpectations.io/" }
+            ],
+            miniProject: {
+              title: "Automated dbt Data Mart Pipeline",
+              desc: "Build a dimensional data mart with automated schema tests and documentation generation."
+            }
+          }
+        ]
+      },
 
-  /* ---------- helpers ---------- */
-  const rnd = n => Math.floor(Math.random() * n);
+      sec: {
+        name: "Cyber Security",
+        icon: "🛡️",
+        estHoursTotal: 380,
+        skills: [
+          {
+            id: "sec-1",
+            level: 1,
+            name: "Networking & Packet Inspection",
+            icon: "🔌",
+            timeEst: "40 hrs",
+            whyItMatters: "Attackers traverse network boundaries. Inspecting raw Wireshark packet captures reveals hidden exploits.",
+            description: "TCP handshakes, subnetting, ARP spoofing, ICMP anomalies, and Wireshark filters.",
+            prerequisites: [],
+            resources: [
+              { name: "Professor Messer's Network+", type: "Video Course", url: "https://www.professormesser.com/network-plus/n10-008/n10-008-video/n10-008-training-course/" },
+              { name: "TryHackMe: Network Fundamentals", type: "Interactive Rooms", url: "https://tryhackme.com/module/network-fundamentals" }
+            ],
+            miniProject: {
+              title: "Suspicious Packet Filter & Sniffer",
+              desc: "Use Python (Scapy) to capture network traffic and flag unencrypted credentials or syn flood patterns."
+            }
+          },
+          {
+            id: "sec-2",
+            level: 1,
+            name: "Linux Security & Bash Automation",
+            icon: "🐧",
+            timeEst: "35 hrs",
+            whyItMatters: "90% of cloud servers run Linux. Mastering file permissions, sudoer configs, and Bash automation is non-negotiable.",
+            description: "Linux permissions, SUID binaries, systemd logging, cron, and SSH hardening.",
+            prerequisites: ["sec-1"],
+            resources: [
+              { name: "OverTheWire: Bandit Wargame", type: "Gamified Hacking", url: "https://overthewire.org/wargames/bandit/" },
+              { name: "Linux Journey", type: "Interactive Guide", url: "https://linuxjourney.com/" }
+            ],
+            miniProject: {
+              title: "Automated Server Hardening Script",
+              desc: "Write a Bash script that audits root logins, closes open ports, and configures UFW firewall."
+            }
+          },
+          {
+            id: "sec-3",
+            level: 1,
+            name: "Applied Cryptography Principles",
+            icon: "🔐",
+            timeEst: "40 hrs",
+            whyItMatters: "Cryptography protects privacy and data integrity. Understanding symmetric vs asymmetric ciphers prevents leaks.",
+            description: "AES-256, RSA, Elliptic Curve Cryptography (ECC), SHA-256 hashing, and digital certificates.",
+            prerequisites: ["sec-1"],
+            resources: [
+              { name: "CryptoHack: Modern Cryptography", type: "Hands-on Puzzles", url: "https://cryptohack.org/" },
+              { name: "Coursera: Cryptography I (Stanford)", type: "Free Audit", url: "https://www.coursera.org/learn/crypto" }
+            ],
+            miniProject: {
+              title: "Salted Password Verifier",
+              desc: "Implement an Argon2/bcrypt password authentication system with timing attack defenses."
+            }
+          },
+          {
+            id: "sec-4",
+            level: 2,
+            name: "Web Security & OWASP Top 10",
+            icon: "🕸️",
+            timeEst: "45 hrs",
+            whyItMatters: "Web vulnerabilities expose user data daily. Learning SQLi, XSS, and CSRF allows you to write secure software.",
+            description: "OWASP Top 10, SQL injection, XSS, CSRF tokens, SSRF, and Burp Suite proxy usage.",
+            prerequisites: ["sec-2", "sec-3"],
+            resources: [
+              { name: "PortSwigger Web Security Academy", type: "Free World-Class Labs", url: "https://portswigger.net/web-security" },
+              { name: "OWASP Top 10 Official Docs", type: "Standards", url: "https://owasp.org/www-project-top-ten/" }
+            ],
+            miniProject: {
+              title: "Vulnerable Lab Exploitation & Remediation",
+              desc: "Exploit a controlled SQL injection flaw in Burp Suite, then write the secure parameterized query patch."
+            }
+          },
+          {
+            id: "sec-5",
+            level: 2,
+            name: "Penetration Testing & Exploitation",
+            icon: "🎯",
+            timeEst: "45 hrs",
+            whyItMatters: "Offensive security testing discovers privilege escalation flaws before malicious actors do.",
+            description: "Reconnaissance (Nmap), Metasploit, Linux privilege escalation, and Hashcat password cracking.",
+            prerequisites: ["sec-4"],
+            resources: [
+              { name: "Hack The Box Academy", type: "Interactive Training", url: "https://academy.hackthebox.com/" },
+              { name: "TCM Security: Ethical Hacking Guides", type: "Syllabus", url: "https://tcm-sec.com/" }
+            ],
+            miniProject: {
+              title: "Vulnerability Assessment Report",
+              desc: "Conduct an authorized scan on a vulnerable machine, documenting proof of concept and mitigations."
+            }
+          },
+          {
+            id: "sec-6",
+            level: 2,
+            name: "Defensive Security & SOC Operations",
+            icon: "🛡️",
+            timeEst: "45 hrs",
+            whyItMatters: "Offense gets headlines, but defense saves organizations. Analyzing SIEM event logs stops breaches in progress.",
+            description: "SIEM platforms, Splunk/Elastic, Sigma detection rules, endpoint detection, and incident response.",
+            prerequisites: ["sec-2", "sec-3"],
+            resources: [
+              { name: "LetsDefend: Blue Team Training", type: "Simulated SOC Cases", url: "https://letsdefend.io/" },
+              { name: "Splunk Free Security Training", type: "Official Labs", url: "https://www.splunk.com/en_us/training/free-courses/splunk-fundamentals-1.html" }
+            ],
+            miniProject: {
+              title: "SIEM Brute Force Detection Rule",
+              desc: "Write and validate a Sigma rule in Splunk identifying credential stuffing patterns across SSH logs."
+            }
+          },
+          {
+            id: "sec-7",
+            level: 3,
+            name: "Reverse Engineering & Malware Dissection",
+            icon: "🔬",
+            timeEst: "45 hrs",
+            whyItMatters: "To understand sophisticated attacks, you must decompile compiled binaries and trace assembly execution.",
+            description: "Disassemblers (Ghidra), x86 assembly, dynamic sandboxes, and PE file headers.",
+            prerequisites: ["sec-2", "sec-4"],
+            resources: [
+              { name: "OpenSecurityTraining2: Arch 1001", type: "Assembly Labs", url: "https://ost2.fyi/" },
+              { name: "Ghidra Official Training Material", type: "Decompiler Guide", url: "https://ghidra-sre.org/" }
+            ],
+            miniProject: {
+              title: "CrackMe Binary Keygen",
+              desc: "Reverse engineer a compiled CrackMe binary in Ghidra to reconstruct its secret key validation algorithm."
+            }
+          },
+          {
+            id: "sec-8",
+            level: 3,
+            name: "Cloud Security & DevSecOps",
+            icon: "☁️",
+            timeEst: "45 hrs",
+            whyItMatters: "Misconfigured AWS IAM roles and exposed cloud storage cause the majority of modern enterprise breaches.",
+            description: "AWS IAM policies, least privilege principle, Kubernetes security, and static code analysis (SAST).",
+            prerequisites: ["sec-5", "sec-6"],
+            resources: [
+              { name: "Flaws.cloud: AWS Security Labs", type: "Hands-on Challenge", url: "http://flaws.cloud/" },
+              { name: "Cloud Security Alliance (CSA)", type: "Best Practices", url: "https://cloudsecurityalliance.org/" }
+            ],
+            miniProject: {
+              title: "DevSecOps GitHub Action Pipeline",
+              desc: "Set up automated secret scanning (TruffleHog) and vulnerability checks blocking unsafe Git pull requests."
+            }
+          },
+          {
+            id: "sec-9",
+            level: 3,
+            name: "Exploit Development & Red Teaming",
+            icon: "⚔️",
+            timeEst: "50 hrs",
+            whyItMatters: "Understanding buffer overflows, Return-Oriented Programming (ROP), and Active Directory lateral movement reveals true defense limits.",
+            description: "Stack buffer overflows, ROP chains, ASLR/DEP bypasses, and Active Directory Kerberoasting.",
+            prerequisites: ["sec-7"],
+            resources: [
+              { name: "ROP Emporium: Exploitation", type: "Step-by-Step", url: "https://ropemporium.com/" },
+              { name: "BloodHound Active Directory Guide", type: "Lateral Movement Tooling", url: "https://bloodhound.readthedocs.io/" }
+            ],
+            miniProject: {
+              title: "Stack Overflow Buffer Exploit",
+              desc: "Develop an exploit for a vulnerable 32-bit Linux binary executing a local shell in a controlled VM sandbox."
+            }
+          }
+        ]
+      }
+    };
 
-  function rrect(x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + w, y,     x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x,     y + h, r);
-    ctx.arcTo(x,     y + h, x,     y,     r);
-    ctx.arcTo(x,     y,     x + w, y,     r);
-    ctx.closePath();
-  }
+    const TROPHIES = [
+      { id: "t-first", icon: "🌱", name: "First Milestone", desc: "Complete your very first engineering skill." },
+      { id: "t-tier1", icon: "🧱", name: "Foundation Master", desc: "Clear all 3 Foundation level skills in any branch." },
+      { id: "t-tier2", icon: "⚙️", name: "Systems Architect", desc: "Clear all 3 Core level skills in any branch." },
+      { id: "t-branch", icon: "👑", name: "Discipline Champion", desc: "Complete all 9 skills in a single engineering branch." },
+      { id: "t-polymath", icon: "🧭", name: "Polymath Explorer", desc: "Complete skills across at least 2 different branches." }
+    ];
 
-  function syncHud() {
-    scoreEl.textContent = score;
-    bestEl.textContent  = best;
-  }
+    /* State */
+    let currentBranch = "cse";
+    let currentFilter = "all";
+    let currentView = "graph";
+    let completedSkills = new Set();
+    let audioEnabled = true;
+    let activeSkillId = null;
 
-  /* ---------- game setup ---------- */
-  function spawnFood() {
-    const free = [];
-    for (let y = 0; y < ROWS; y++)
-      for (let x = 0; x < COLS; x++)
-        if (!snake.some(s => s.x === x && s.y === y)) free.push({ x, y });
-    return free.length ? free[rnd(free.length)] : { x: 0, y: 0 };
-  }
-
-  function reset() {
-    snake  = [{ x: 9, y: 10 }, { x: 8, y: 10 }, { x: 7, y: 10 }];
-    dir    = { x: 1, y: 0 };
-    queue  = [];
-    score  = 0;
-    stepMs = BASE_STEP;
-    state  = 'ready';
-    food   = spawnFood();
-    acc    = 0;
-    last   = performance.now();
-    syncHud();
-  }
-
-  function start() {
-    reset();
-    state = 'playing';
-    overlay.hidden = true;
-    last = performance.now();
-    ovBtn.blur();
-  }
-
-  function gameOver() {
-    state = 'over';
-    if (score > best) {
-      best = score;
-      try { localStorage.setItem(BEST_KEY, best); } catch (e) {}
+    /* Load & Save */
+    function loadState() {
+      try {
+        const saved = localStorage.getItem("roadmap_completed_skills");
+        if (saved) completedSkills = new Set(JSON.parse(saved));
+        const theme = localStorage.getItem("roadmap_theme");
+        if (theme) {
+          document.body.setAttribute("data-theme", theme);
+          document.getElementById("theme-icon").textContent = theme === "dark" ? "☀️" : "🌙";
+        }
+      } catch (e) {}
     }
-    syncHud();
-    showOverlay('GAME OVER',
-      `Score <b>${score}</b> &nbsp;·&nbsp; Best <b>${best}</b><br>Press space to try again`,
-      'Play again');
-  }
 
-  function showOverlay(title, html, btn) {
-    ovTitle.textContent = title;
-    ovText.innerHTML    = html;
-    ovBtn.textContent   = btn;
-    overlay.hidden      = false;
-  }
-
-  /* ---------- input ---------- */
-  function turn(x, y) {
-    const ref = queue.length ? queue[queue.length - 1] : dir;
-    if ((x === -ref.x && y === -ref.y) || (x === ref.x && y === ref.y)) return;
-    if (queue.length < 2) queue.push({ x, y });
-  }
-
-  const KEYS = {
-    arrowup:[0,-1], w:[0,-1],
-    arrowdown:[0,1], s:[0,1],
-    arrowleft:[-1,0], a:[-1,0],
-    arrowright:[1,0], d:[1,0]
-  };
-
-  addEventListener('keydown', e => {
-    const k = e.key.toLowerCase();
-    if (KEYS[k]) {
-      e.preventDefault();
-      if (state === 'ready') start();
-      if (state === 'playing') turn(KEYS[k][0], KEYS[k][1]);
-    } else if (k === ' ' || k === 'enter') {
-      e.preventDefault();
-      if (state !== 'playing') start();
+    function saveState() {
+      try {
+        localStorage.setItem("roadmap_completed_skills", JSON.stringify(Array.from(completedSkills)));
+      } catch (e) {}
     }
-  });
 
-  overlay.addEventListener('click', start);
+    /* Web Audio SFX */
+    let audioCtx = null;
+    function playSfx(type) {
+      if (!audioEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
 
-  // swipe support
-  let tStart = null;
-  canvas.addEventListener('touchstart', e => {
-    const t = e.changedTouches[0];
-    tStart = { x: t.clientX, y: t.clientY };
-    e.preventDefault();
-  }, { passive: false });
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-  canvas.addEventListener('touchend', e => {
-    if (!tStart) return;
-    const t  = e.changedTouches[0];
-    const dx = t.clientX - tStart.x;
-    const dy = t.clientY - tStart.y;
-    tStart = null;
-    e.preventDefault();
-    if (Math.hypot(dx, dy) < 20) return;               // tap, ignore
-    if (Math.abs(dx) > Math.abs(dy)) turn(Math.sign(dx), 0);
-    else                             turn(0, Math.sign(dy));
-  }, { passive: false });
-
-  /* ---------- logic ---------- */
-  function step() {
-    if (queue.length) dir = queue.shift();
-
-    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
-    // walls
-    if (head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS)
-      return gameOver();
-
-    const grow = head.x === food.x && head.y === food.y;
-    const body = grow ? snake : snake.slice(0, -1);   // tail moves away
-
-    if (body.some(s => s.x === head.x && s.y === head.y))
-      return gameOver();
-
-    snake.unshift(head);
-
-    if (grow) {
-      score++;
-      stepMs = Math.max(MIN_STEP, BASE_STEP - score * 3);
-      food   = spawnFood();
-      syncHud();
-    } else {
-      snake.pop();
+        const now = audioCtx.currentTime;
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(500, now);
+          osc.frequency.exponentialRampToValueAtTime(750, now + 0.04);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } else if (type === 'done') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(554, now + 0.07);
+          osc.frequency.setValueAtTime(659, now + 0.14);
+          osc.frequency.setValueAtTime(880, now + 0.21);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+      } catch (e) {}
     }
-  }
 
-  /* ---------- rendering ---------- */
-  function draw() {
-    const W = canvas.width, H = canvas.height;
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('audio-icon').textContent = audioEnabled ? '🔊' : '🔇';
+      playSfx('click');
+    }
 
-    ctx.fillStyle = '#1a1e2a';
-    ctx.fillRect(0, 0, W, H);
+    function toggleTheme() {
+      const cur = document.body.getAttribute('data-theme') || 'dark';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem("roadmap_theme", next);
+      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙';
+      playSfx('click');
+      render();
+    }
 
-    // grid
-    ctx.strokeStyle = 'rgba(255,255,255,.035)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    for (let i = 1; i < COLS; i++) { ctx.moveTo(i * CELL + .5, 0); ctx.lineTo(i * CELL + .5, H); }
-    for (let j = 1; j < ROWS; j++) { ctx.moveTo(0, j * CELL + .5); ctx.lineTo(W, j * CELL + .5); }
-    ctx.stroke();
+    /* Prerequisite Engine */
+    function getSkillState(skill) {
+      if (completedSkills.has(skill.id)) return "done";
+      if (!skill.prerequisites || skill.prerequisites.length === 0) return "ready";
+      return skill.prerequisites.every(id => completedSkills.has(id)) ? "ready" : "locked";
+    }
 
-    // food
-    const pulse = 1 + Math.sin(performance.now() / 160) * 0.09;
-    ctx.save();
-    ctx.shadowColor = 'rgba(248,113,113,.9)';
-    ctx.shadowBlur  = 18;
-    ctx.fillStyle   = '#f87171';
-    ctx.beginPath();
-    ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2,
-            (CELL / 2 - 4) * pulse, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    /* Switch Branch */
+    function switchBranch(branchId) {
+      currentBranch = branchId;
+      playSfx('click');
 
-    // snake (tail → head)
-    for (let i = snake.length - 1; i >= 0; i--) {
-      const s = snake[i];
-      const k = snake.length > 1 ? i / (snake.length - 1) : 0;
-      const head = i === 0;
+      document.querySelectorAll('.branch-card').forEach(c => c.classList.remove('active'));
+      const activeTab = document.getElementById(`tab-${branchId}`);
+      if (activeTab) activeTab.classList.add('active');
 
-      if (head) {
-        ctx.save();
-        ctx.shadowColor = 'rgba(74,222,128,.55)';
-        ctx.shadowBlur  = 14;
-        ctx.fillStyle   = '#7cf7b0';
+      document.getElementById('hud-branch-tag').textContent = `${branchId.toUpperCase()} // ACTIVE`;
+      render();
+      update3DMatrix();
+    }
+
+    /* Render Application */
+    function render() {
+      const branch = DATA[currentBranch];
+      const skills = branch.skills;
+
+      const total = skills.length;
+      const doneCount = skills.filter(s => completedSkills.has(s.id)).length;
+      const pct = Math.round((doneCount / total) * 100);
+
+      // Tab sub-labels
+      Object.keys(DATA).forEach(k => {
+        const dCount = DATA[k].skills.filter(s => completedSkills.has(s.id)).length;
+        const sub = document.getElementById(`sub-${k}`);
+        if (sub) sub.textContent = `${dCount} / 9 Milestones`;
+      });
+
+      // Progress Ring
+      const ringFill = document.getElementById('ring-fill-bar');
+      const maxOffset = 226;
+      ringFill.style.strokeDashoffset = maxOffset - (pct / 100) * maxOffset;
+      document.getElementById('ring-pct-txt').textContent = `${pct}%`;
+      document.getElementById('progress-count-txt').textContent = `${doneCount} of 9 Done`;
+      document.getElementById('progress-hours-txt').textContent = `Est. ${branch.estHoursTotal} Hours Total`;
+
+      const rankBadge = document.getElementById('progress-rank-badge');
+      if (pct === 100) rankBadge.textContent = "Master Architect 👑";
+      else if (pct >= 66) rankBadge.textContent = "Senior Specialist ⚙️";
+      else if (pct >= 33) rankBadge.textContent = "Core Practitioner ⚡";
+      else rankBadge.textContent = "Apprentice Engineer 🛠️";
+
+      // Recommended Target Spotlight
+      const nextSkill = skills.find(s => getSkillState(s) === "ready");
+      const spotBox = document.getElementById('spotlight-box');
+      if (nextSkill) {
+        spotBox.style.display = "flex";
+        document.getElementById('spotlight-title').textContent = nextSkill.name;
+        document.getElementById('spotlight-desc').textContent = nextSkill.whyItMatters;
+      } else if (doneCount === total) {
+        spotBox.style.display = "flex";
+        document.getElementById('spotlight-title').textContent = "Discipline Mastered! 🎉";
+        document.getElementById('spotlight-desc').textContent = "You completed all 9 milestones in this specialization. Explore the other branches or build open-source projects.";
       } else {
-        ctx.fillStyle = `hsl(147 55% ${46 - 16 * k}%)`;
+        spotBox.style.display = "none";
       }
 
-      rrect(s.x * CELL + 1.5, s.y * CELL + 1.5, CELL - 3, CELL - 3, 6);
-      ctx.fill();
-      if (head) ctx.restore();
+      renderGraph(skills);
+      renderMatrix(skills);
+      updateTrophies();
     }
 
-    // eyes
-    const hx = snake[0].x * CELL + CELL / 2;
-    const hy = snake[0].y * CELL + CELL / 2;
-    const ox = dir.x * CELL * 0.16, oy = dir.y * CELL * 0.16;
-    const px = -dir.y * CELL * 0.18, py = dir.x * CELL * 0.18;
-    ctx.fillStyle = '#0b1a12';
-    for (const s of [1, -1]) {
-      ctx.beginPath();
-      ctx.arc(hx + ox + px * s, hy + oy + py * s, CELL * 0.09, 0, Math.PI * 2);
-      ctx.fill();
+    /* Render Graph View */
+    function renderGraph(skills) {
+      const stage = document.getElementById('graph-stage');
+      const svg = document.getElementById('svg-wires');
+
+      stage.querySelectorAll('.tree-node').forEach(n => n.remove());
+      svg.innerHTML = '';
+
+      const colX = [30, 300, 570];
+      const rowY = [40, 160, 280];
+      const coords = {};
+
+      skills.forEach((skill, i) => {
+        const tier = skill.level - 1;
+        const slot = i % 3;
+        const x = colX[tier];
+        const y = rowY[slot];
+        coords[skill.id] = { x: x + 115, y: y + 25, nodeX: x, nodeY: y };
+
+        const state = getSkillState(skill);
+        const node = document.createElement('div');
+        node.className = `tree-node ${state}`;
+        node.style.left = `${x}px`;
+        node.style.top = `${y}px`;
+        node.onclick = () => openDrawer(skill.id);
+        node.innerHTML = `
+          <div class="node-icon">${skill.icon}</div>
+          <div class="node-meta">
+            <span class="node-name" title="${skill.name}">${skill.name}</span>
+            <span class="node-status-txt">${state.toUpperCase()} • ${skill.timeEst}</span>
+          </div>
+        `;
+        stage.appendChild(node);
+      });
+
+      // SVG Connections
+      skills.forEach(skill => {
+        if (skill.prerequisites && skill.prerequisites.length > 0) {
+          skill.prerequisites.forEach(prereqId => {
+            const start = coords[prereqId];
+            const end = coords[skill.id];
+            if (start && end) {
+              const startX = start.nodeX + 230;
+              const startY = start.y;
+              const endX = end.nodeX;
+              const endY = end.y;
+
+              const c1X = startX + (endX - startX) * 0.5;
+              const c2X = startX + (endX - startX) * 0.5;
+
+              const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              path.setAttribute('d', `M ${startX} ${startY} C ${c1X} ${startY}, ${c2X} ${endY}, ${endX} ${endY}`);
+              path.setAttribute('class', `wire-line ${completedSkills.has(prereqId) ? 'unlocked' : ''}`);
+              svg.appendChild(path);
+            }
+          });
+        }
+      });
     }
-  }
 
-  /* ---------- main loop ---------- */
-  function loop(now) {
-    const dt = Math.min(now - last, 250);
-    last = now;
+    /* Render Matrix View */
+    function renderMatrix(skills) {
+      const g1 = document.getElementById('tier-1-grid');
+      const g2 = document.getElementById('tier-2-grid');
+      const g3 = document.getElementById('tier-3-grid');
 
-    if (state === 'playing') {
-      acc += dt;
-      while (acc >= stepMs && state === 'playing') {
-        acc -= stepMs;
-        step();
+      g1.innerHTML = ''; g2.innerHTML = ''; g3.innerHTML = '';
+
+      let t1 = 0, t2 = 0, t3 = 0;
+
+      skills.forEach(skill => {
+        const state = getSkillState(skill);
+        if (skill.level === 1 && state === 'done') t1++;
+        if (skill.level === 2 && state === 'done') t2++;
+        if (skill.level === 3 && state === 'done') t3++;
+
+        if (currentFilter === 'ready' && state !== 'ready') return;
+        if (currentFilter === 'done' && state !== 'done') return;
+        if (currentFilter === 'locked' && state !== 'locked') return;
+
+        const box = document.createElement('div');
+        box.className = `skill-box ${state}`;
+        box.onclick = () => openDrawer(skill.id);
+
+        let badgeClass = "badge-locked", badgeTxt = "🔒 Locked";
+        if (state === "ready") { badgeClass = "badge-ready"; badgeTxt = "⚡ Ready"; }
+        else if (state === "done") { badgeClass = "badge-done"; badgeTxt = "✅ Done"; }
+
+        box.innerHTML = `
+          <div class="box-top">
+            <div class="box-icon">${skill.icon}</div>
+            <span class="box-badge ${badgeClass}">${badgeTxt}</span>
+          </div>
+          <div>
+            <h4 class="box-title">${skill.name}</h4>
+            <p class="box-desc">${skill.description}</p>
+          </div>
+          <div class="box-foot">
+            <span>⏱ ${skill.timeEst}</span>
+            <span class="box-action">Inspect →</span>
+          </div>
+        `;
+
+        if (skill.level === 1) g1.appendChild(box);
+        else if (skill.level === 2) g2.appendChild(box);
+        else g3.appendChild(box);
+      });
+
+      document.getElementById('t1-progress-badge').textContent = `${t1} / 3 Done`;
+      document.getElementById('t2-progress-badge').textContent = `${t2} / 3 Done`;
+      document.getElementById('t3-progress-badge').textContent = `${t3} / 3 Done`;
+    }
+
+    /* View Switcher */
+    function switchView(mode) {
+      currentView = mode;
+      playSfx('click');
+
+      const gView = document.getElementById('view-graph');
+      const mView = document.getElementById('view-matrix');
+      const bG = document.getElementById('btn-view-graph');
+      const bM = document.getElementById('btn-view-matrix');
+
+      if (mode === 'graph') {
+        gView.style.display = 'block';
+        mView.style.display = 'none';
+        bG.classList.add('active');
+        bM.classList.remove('active');
+      } else {
+        gView.style.display = 'none';
+        mView.style.display = 'flex';
+        bG.classList.remove('active');
+        bM.classList.add('active');
       }
-      if (state !== 'playing') acc = 0;
     }
 
-    draw();
-    requestAnimationFrame(loop);
-  }
+    function setFilter(type, el) {
+      currentFilter = type;
+      playSfx('click');
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      render();
+    }
 
-  /* ---------- boot ---------- */
-  reset();
-  showOverlay('SNAKE',
-    'Eat the red dots — avoid the walls and yourself.<br>Arrow keys / WASD to move',
-    'Start');
-  requestAnimationFrame(loop);
-})();
-</script>
+    function handleSearch(term) {
+      const q = term.toLowerCase().trim();
+      document.querySelectorAll('.skill-box').forEach(b => {
+        b.style.display = b.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+      });
+      document.querySelectorAll('.tree-node').forEach(n => {
+        n.style.opacity = n.textContent.toLowerCase().includes(q) ? '1' : '0.2';
+      });
+    }
+
+    /* Drawer Inspector */
+    function openDrawer(skillId) {
+      activeSkillId = skillId;
+      playSfx('click');
+
+      const skill = DATA[currentBranch].skills.find(s => s.id === skillId);
+      if (!skill) return;
+
+      const state = getSkillState(skill);
+
+      document.getElementById('d-tier-chip').textContent = `LEVEL 0${skill.level} // TIER ${skill.level}`;
+      document.getElementById('d-title').textContent = skill.name;
+      document.getElementById('d-desc').textContent = skill.description;
+      document.getElementById('d-why').textContent = skill.whyItMatters;
+      document.getElementById('d-time-txt').textContent = `⏱ ${skill.timeEst} Required`;
+
+      const pill = document.getElementById('d-status-pill');
+      if (state === 'done') { pill.className = 'box-badge badge-done'; pill.textContent = 'COMPLETED ✅'; }
+      else if (state === 'ready') { pill.className = 'box-badge badge-ready'; pill.textContent = 'READY TO START ⚡'; }
+      else { pill.className = 'box-badge badge-locked'; pill.textContent = 'LOCKED 🔒 (NEEDS PREREQUISITES)'; }
+
+      // Prerequisites
+      const prereqsBox = document.getElementById('d-prereqs');
+      prereqsBox.innerHTML = '';
+      if (!skill.prerequisites || skill.prerequisites.length === 0) {
+        prereqsBox.innerHTML = '<span style="font-size: 13.5px; color: var(--emerald);">✓ None! Open for immediate study.</span>';
+      } else {
+        skill.prerequisites.forEach(pId => {
+          const p = DATA[currentBranch].skills.find(s => s.id === pId);
+          const isDone = completedSkills.has(pId);
+          const btn = document.createElement('button');
+          btn.className = 'prereq-btn';
+          btn.innerHTML = `<span>${isDone ? '✅' : '⏳'}</span><span>${p ? p.name : pId}</span>`;
+          btn.onclick = () => openDrawer(pId);
+          prereqsBox.appendChild(btn);
+        });
+      }
+
+      // Resources
+      const resBox = document.getElementById('d-resources');
+      resBox.innerHTML = '';
+      skill.resources.forEach(r => {
+        const item = document.createElement('a');
+        item.href = r.url;
+        item.target = '_blank';
+        item.rel = 'noopener noreferrer';
+        item.className = 'resource-card';
+        item.innerHTML = `
+          <div>
+            <div style="font-weight: 600; font-size: 14px;">${r.name}</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">${r.type}</div>
+          </div>
+          <span style="color: var(--blue); font-size: 14px;">Visit ↗</span>
+        `;
+        resBox.appendChild(item);
+      });
+
+      // Project
+      document.getElementById('d-proj-title').textContent = `🛠️ ${skill.miniProject.title}`;
+      document.getElementById('d-proj-desc').textContent = skill.miniProject.desc;
+
+      // Toggle Action
+      const actBtn = document.getElementById('d-action-btn');
+      if (state === 'done') {
+        actBtn.innerHTML = '<span>Mark Incomplete ↺</span>';
+        actBtn.className = 'btn btn-glass';
+      } else {
+        actBtn.innerHTML = '<span>Mark as Completed ✅</span>';
+        actBtn.className = 'btn btn-primary';
+      }
+
+      document.getElementById('drawer-overlay').classList.add('open');
+    }
+
+    function openCurrentTarget() {
+      const skills = DATA[currentBranch].skills;
+      const next = skills.find(s => getSkillState(s) === "ready");
+      if (next) openDrawer(next.id);
+    }
+
+    function closeDrawerDirect() {
+      document.getElementById('drawer-overlay').classList.remove('open');
+    }
+
+    function closeDrawerBackdrop(e) {
+      if (e.target.id === 'drawer-overlay') closeDrawerDirect();
+    }
+
+    function toggleActiveSkill() {
+      if (!activeSkillId) return;
+
+      if (completedSkills.has(activeSkillId)) {
+        completedSkills.delete(activeSkillId);
+        playSfx('click');
+      } else {
+        completedSkills.add(activeSkillId);
+        playSfx('done');
+        if (window.confetti) {
+          window.confetti({ particleCount: 75, spread: 60, origin: { y: 0.7 } });
+        }
+      }
+
+      saveState();
+      render();
+      update3DMatrix();
+      openDrawer(activeSkillId);
+    }
+
+    /* Export Checklist */
+    function exportChecklist() {
+      playSfx('click');
+      const branch = DATA[currentBranch];
+      let txt = `# CHOOSE.YOUR.ROADMAP: ${branch.name} Checklist\n\n`;
+      branch.skills.forEach(s => {
+        const check = completedSkills.has(s.id) ? "[x]" : "[ ]";
+        txt += `${check} ${s.name} (Tier ${s.level}, ${s.timeEst})\n   - Project: ${s.miniProject.title}\n`;
+      });
+      txt += `\nExported from CHOOSE.YOUR.ROADMAP // ${new Date().toLocaleDateString()}`;
+
+      const blob = new Blob([txt], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentBranch}-roadmap-checklist.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    /* Trophies Modal */
+    function updateTrophies() {
+      let count = 0;
+      const list = document.getElementById('trophies-list');
+      list.innerHTML = '';
+
+      TROPHIES.forEach(t => {
+        let isUnlocked = false;
+        if (t.id === "t-first" && completedSkills.size >= 1) isUnlocked = true;
+        if (t.id === "t-tier1") {
+          isUnlocked = Object.values(DATA).some(b => b.skills.filter(s => s.level === 1).every(s => completedSkills.has(s.id)));
+        }
+        if (t.id === "t-tier2") {
+          isUnlocked = Object.values(DATA).some(b => b.skills.filter(s => s.level === 2).every(s => completedSkills.has(s.id)));
+        }
+        if (t.id === "t-branch") {
+          isUnlocked = Object.values(DATA).some(b => b.skills.every(s => completedSkills.has(s.id)));
+        }
+        if (t.id === "t-polymath") {
+          const branches = Object.values(DATA).filter(b => b.skills.some(s => completedSkills.has(s.id))).length;
+          if (branches >= 2) isUnlocked = true;
+        }
+
+        if (isUnlocked) count++;
+
+        const card = document.createElement('div');
+        card.className = `trophy-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+        card.innerHTML = `
+          <div class="trophy-icon">${t.icon}</div>
+          <div>
+            <div style="font-weight: 700; font-size: 14px;">${t.name} ${isUnlocked ? '✓' : ''}</div>
+            <div style="font-size: 12px; color: var(--text-tertiary);">${t.desc}</div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      document.getElementById('badge-pill').textContent = `${count}/5`;
+    }
+
+    function openModal(id) {
+      playSfx('click');
+      document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+    function closeModalBackdrop(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+
+    /* Keyboard Shortcuts */
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey && e.key === 'k') || e.key === '/') {
+        e.preventDefault();
+        const input = document.getElementById('search-input');
+        input.focus();
+        input.select();
+      } else if (e.key === 'Escape') {
+        closeDrawerDirect();
+        closeModal('modal-judges');
+        closeModal('modal-trophies');
+      }
+    });
+
+    /* Three.js 3D Isometric Matrix */
+    let scene, camera, renderer, nodeGroup, raycaster, mouse;
+
+    function init3D() {
+      const container = document.querySelector('.canvas-card');
+      const canvas = document.getElementById('three-viewport');
+      if (!canvas || !window.THREE) return;
+
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(0, 4, 20);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+      const p1 = new THREE.PointLight(0x3b82f6, 2, 50);
+      p1.position.set(10, 10, 10);
+      scene.add(p1);
+
+      const p2 = new THREE.PointLight(0x10b981, 1.5, 40);
+      p2.position.set(-10, -5, 5);
+      scene.add(p2);
+
+      nodeGroup = new THREE.Group();
+      scene.add(nodeGroup);
+
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
+
+      update3DMatrix();
+
+      container.addEventListener('mousemove', e => {
+        const rect = container.getBoundingClientRect();
+        const mx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const my = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        nodeGroup.rotation.y = mx * 0.4;
+        nodeGroup.rotation.x = -my * 0.25;
+      });
+
+      canvas.addEventListener('click', e => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(nodeGroup.children);
+        if (hits.length > 0) {
+          const hit = hits[0].object;
+          if (hit.userData && hit.userData.skillId) {
+            openDrawer(hit.userData.skillId);
+          }
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        if (!container || !camera || !renderer) return;
+        const nw = container.clientWidth;
+        const nh = container.clientHeight;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (nodeGroup) {
+          nodeGroup.position.y = Math.sin(Date.now() * 0.0015) * 0.2;
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    function update3DMatrix() {
+      if (!nodeGroup) return;
+      while (nodeGroup.children.length > 0) {
+        nodeGroup.remove(nodeGroup.children[0]);
+      }
+
+      const skills = DATA[currentBranch].skills;
+      const colX = [-6.2, 0, 6.2];
+      const rowY = [3.2, 0, -3.2];
+      const meshCoords = {};
+
+      skills.forEach((skill, i) => {
+        const tier = skill.level - 1;
+        const row = i % 3;
+        const x = colX[tier];
+        const y = rowY[row];
+        const z = Math.sin(i * 1.5) * 1.2;
+
+        meshCoords[skill.id] = new THREE.Vector3(x, y, z);
+        const state = getSkillState(skill);
+
+        let color = 0x475569;
+        if (state === 'done') color = 0x10b981;
+        else if (state === 'ready') color = 0xf59e0b;
+
+        const geo = new THREE.BoxGeometry(2.3, 1.3, 0.4);
+        const mat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.3, metalness: 0.8 });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z);
+        mesh.userData = { skillId: skill.id };
+        nodeGroup.add(mesh);
+
+        const wireGeo = new THREE.BoxGeometry(2.5, 1.5, 0.6);
+        const wireMat = new THREE.MeshBasicMaterial({ color: color, wireframe: true, transparent: true, opacity: 0.3 });
+        mesh.add(new THREE.Mesh(wireGeo, wireMat));
+      });
+
+      skills.forEach(skill => {
+        if (skill.prerequisites && skill.prerequisites.length > 0) {
+          skill.prerequisites.forEach(pId => {
+            const start = meshCoords[pId];
+            const end = meshCoords[skill.id];
+            if (start && end) {
+              const lineGeo = new THREE.BufferGeometry().setFromPoints([start, end]);
+              const isDone = completedSkills.has(pId);
+              const lineMat = new THREE.LineBasicMaterial({
+                color: isDone ? 0x10b981 : 0x3b82f6,
+                transparent: true,
+                opacity: isDone ? 0.9 : 0.35
+              });
+              nodeGroup.add(new THREE.Line(lineGeo, lineMat));
+            }
+          });
+        }
+      });
+    }
+
+    /* Boot */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      render();
+      setTimeout(init3D, 80);
+    });
+  </script>
 </body>
 </html>
