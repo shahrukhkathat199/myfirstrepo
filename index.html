@@ -1580,6 +1580,11 @@
       </div>
 
       <div class="nav-controls">
+        <!-- Roadmap.sh Sync Badge -->
+        <a class="btn btn-glass" href="https://roadmap.sh/roadmaps" target="_blank" rel="noopener noreferrer" title="View Official roadmap.sh Developer Roadmaps" style="border-color: rgba(245, 158, 11, 0.4);">
+          <span style="color: var(--amber);">🗺️ roadmap.sh Guides</span>
+        </a>
+
         <!-- Export / Download Checklist -->
         <button class="btn btn-glass" onclick="exportChecklist()" title="Export Roadmap Checklist">
           <span>📥 Export Plan</span>
@@ -1883,6 +1888,25 @@
 
         <!-- TAB 2: STUDY GUIDE & INTERVIEW MENTAL MODELS -->
         <div id="d-pane-study" style="display: none; flex-direction: column; gap: 16px;">
+          <!-- Step-by-Step Zero Jumps Progression -->
+          <div class="study-box" style="border-left: 3px solid var(--emerald); background: rgba(16, 185, 129, 0.05);">
+            <h4>🪜 Step-by-Step Learning Progression (Zero Jumps)</h4>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+              <div style="font-size: 13.5px; line-height: 1.5;">
+                <strong style="color: var(--emerald);">🟢 Stage 1 (1st-Year College Beginner):</strong><br>
+                <span id="d-step-beginner" style="color: var(--text-secondary);"></span>
+              </div>
+              <div style="font-size: 13.5px; line-height: 1.5;">
+                <strong style="color: var(--blue);">🟡 Stage 2 (Core Engineering Competence):</strong><br>
+                <span id="d-step-core" style="color: var(--text-secondary);"></span>
+              </div>
+              <div style="font-size: 13.5px; line-height: 1.5;">
+                <strong style="color: var(--purple);">🔴 Stage 3 (Industry Staff & Scale):</strong><br>
+                <span id="d-step-industry" style="color: var(--text-secondary);"></span>
+              </div>
+            </div>
+          </div>
+
           <div class="study-box">
             <h4>💡 Core Mental Model</h4>
             <p id="d-study-concept"></p>
@@ -4001,6 +4025,49 @@ p.sendline(payload)`,
       });
     }
 
+    /* Roadmap.sh Verified Track Mappings and Zero-Jumps Progression */
+    const ROADMAP_MAP = {
+      "cse-1": { url: "https://roadmap.sh/cpp", freshman: "Install GCC/Clang, learn variable types (int, float, char), basic loops, write 'Hello World' on Godbolt Compiler Explorer.", core: "Pointers, arrays, struct memory padding, manual malloc/free, dynamic arrays.", industry: "Custom memory arena allocators, Valgrind leak profiling, cache line alignment in game/engine architectures." },
+      "cse-2": { url: "https://roadmap.sh/datastructures-and-algorithms", freshman: "Understand Big-O space/time complexity, implement linear search, binary search, and linked lists.", core: "Binary heaps, balanced BSTs (AVL, Red-Black), BFS/DFS graph traversals, dynamic programming.", industry: "Thread-safe skip lists, lock-free queues, spatial indexing (R-Trees), and competitive coding interview patterns." },
+      "cse-3": { url: "https://roadmap.sh/computer-science", freshman: "Learn boolean logic gates (AND, OR, NOT), binary representation, two's complement, and CPU clock cycles.", core: "Instruction pipelining, ALU operations, register files, and x86/ARM assembly translation.", industry: "AVX-512 SIMD vectorization, speculative execution branch prediction, and multi-socket NUMA caching." },
+      "cse-4": { url: "https://roadmap.sh/computer-science", freshman: "Understand what an operating system does: kernel vs user mode, basic command line, and process management.", core: "POSIX fork/exec, thread synchronization, mutexes, condition variables, and virtual memory paging.", industry: "eBPF kernel tracing, custom CPU task schedulers, high-throughput epoll non-blocking network loops." },
+      "cse-5": { url: "https://roadmap.sh/sql", freshman: "Learn relational database tables, primary/foreign keys, and basic SELECT, INSERT, UPDATE, DELETE queries.", core: "ACID properties, B-Tree and Hash index structures, query execution plans (EXPLAIN), and transaction isolation.", industry: "Write-Ahead Logging (WAL) internals, read/write replication, sharding algorithms, and distributed transactions." },
+      "cse-6": { url: "https://roadmap.sh/backend", freshman: "Understand client-server architecture, IP addresses, ports, and what happens when you type a URL into a browser.", core: "TCP 3-way handshake, socket programming, DNS resolution, TLS/SSL encryption certificates.", industry: "HTTP/3 over QUIC protocol, eBPF socket filters, zero-copy packet processing with DPDK." },
+      "cse-7": { url: "https://roadmap.sh/system-design", freshman: "Understand why one server cannot handle 100 million users; horizontal vs vertical scaling concepts.", core: "Load balancers, consistent hashing, caching layers (Redis), and CAP theorem trade-offs.", industry: "Raft consensus election, distributed event streaming (Kafka), saga transaction patterns, and geo-replication." },
+      "cse-8": { url: "https://roadmap.sh/computer-science", freshman: "Learn regular expressions, tokenization, and what distinguishes an interpreter from a compiler.", core: "Context-free grammars, recursive descent parsing, Abstract Syntax Trees (AST), and type checkers.", industry: "LLVM IR generation, Static Single Assignment (SSA) optimizations, and JIT compilation engines." },
+      "cse-9": { url: "https://roadmap.sh/cpp", freshman: "Learn how to benchmark code and measure execution runtime in milliseconds.", core: "Profiling with perf/gprof, compiler optimization flags (-O3), memory layout, and branch elimination.", industry: "Lock-free atomic synchronization, GPU CUDA kernel programming, and zero-allocation network engines." },
+
+      "ai-1": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Basic matrix addition and multiplication, vectors, and finding derivatives of single-variable polynomials.", core: "Eigenvalues, dot products, multivariate calculus, gradient vectors, and Bayes' theorem.", industry: "Singular Value Decomposition (SVD), Hessian matrices, and optimization manifolds for deep nets." },
+      "ai-2": { url: "https://roadmap.sh/python-data-analysis", freshman: "Learn Python basic syntax: lists, dictionaries, functions, and importing standard libraries.", core: "NumPy array broadcasting, Pandas DataFrame aggregation, missing value imputation, and Matplotlib plotting.", industry: "Polars Rust-backed vectorization, Apache Arrow memory buffers, and multi-core batch transforms." },
+      "ai-3": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Understand supervised vs unsupervised learning: classification vs regression vs clustering.", core: "Linear regression, logistic regression, decision trees, Random Forests, and cross-validation.", industry: "Gradient-boosted decision trees (XGBoost, LightGBM) with Bayesian hyperparameter optimization." },
+      "ai-4": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Understand how artificial neurons mimic biological synapses with inputs, weights, and activation thresholds.", core: "Backpropagation chain rule, Convolutional layers (CNNs), MaxPooling, PyTorch tensors, and Dropout.", industry: "Distributed Data Parallel (DDP) multi-GPU training, mixed-precision FP16, and TorchScript JIT compilation." },
+      "ai-5": { url: "https://roadmap.sh/prompt-engineering", freshman: "Learn string manipulation, text tokenization, bag-of-words, and word frequency counts.", core: "Word2Vec embeddings, Self-Attention mechanism, Transformer encoders/decoders, and Hugging Face.", industry: "FlashAttention-2 kernel optimization, rotary positional embeddings (RoPE), and KV-cache compression." },
+      "ai-6": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Understand digital images as 3D matrices of pixels (RGB channels) with OpenCV basics.", core: "Edge detection kernels, YOLO real-time object detection, image segmentation, and Latent Diffusion basics.", industry: "TensorRT edge deployment, real-time video stream analytics, and latent diffusion fine-tuning (ControlNet)." },
+      "ai-7": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Understand trial-and-error learning: rewards, penalties, and balancing exploration with exploitation.", core: "Markov Decision Processes, Q-learning tables, Deep Q-Networks (DQN), and policy gradients.", industry: "Proximal Policy Optimization (PPO), Direct Preference Optimization (DPO), and RLHF for LLMs." },
+      "ai-8": { url: "https://roadmap.sh/devops", freshman: "Understand how code runs on a local computer vs deploying to a cloud server.", core: "Docker containers, FastAPI model endpoints, MLflow experiment tracking, and DVC data versioning.", industry: "Triton inference servers, dynamic GPU batching, Kubernetes model autoscaling, and feature drift monitors." },
+      "ai-9": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Understand prompt engineering, zero-shot and few-shot generation with OpenAI/Anthropic APIs.", core: "Vector databases (Chroma, Pinecone), document chunking, semantic similarity retrieval, and LangChain.", industry: "LoRA parameter-efficient fine-tuning, hybrid BM25/Dense RAG, and self-correcting agent evaluation." },
+
+      "ds-1": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Calculate mean, median, mode, standard deviation, and understand normal distribution bell curves.", core: "Central Limit Theorem, confidence intervals, p-values, hypothesis testing (t-tests), and ANOVA.", industry: "Bayesian A/B testing, multi-armed bandits, false discovery rate (FDR) control in large-scale experimentation." },
+      "ds-2": { url: "https://roadmap.sh/python-data-analysis", freshman: "Open CSV files, clean messy string values, parse dates, and remove duplicate rows.", core: "Exploratory Data Analysis (EDA), missing value imputation strategies, outlier detection, and feature engineering.", industry: "Automated data validation pipelines (Great Expectations), schema drift detection, and data contracts." },
+      "ds-3": { url: "https://roadmap.sh/sql", freshman: "Write basic SELECT queries with WHERE filters, ORDER BY, and simple aggregate COUNT/SUM functions.", core: "INNER/LEFT/FULL joins, GROUP BY, subqueries, and window functions (ROW_NUMBER, LAG, LEAD).", industry: "Query execution plan tuning, partitioning strategies, materialized views, and columnar warehouse design." },
+      "ds-4": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Understand fitting a straight trendline through scatter plot points (Ordinary Least Squares).", core: "Ridge and Lasso L1/L2 regularization, logistic regression odds ratios, and ARIMA time-series forecasting.", industry: "Survival analysis hazard models, conformal prediction intervals, and automated model explainability (SHAP)." },
+      "ds-5": { url: "https://roadmap.sh/backend", freshman: "Understand why Excel crashes on files with over 1 million rows and why distributed compute exists.", core: "Apache Spark RDDs, PySpark DataFrames, broadcast joins, and cluster partition management.", industry: "Delta Lake ACID storage on S3, Spark memory executor tuning, and petabyte-scale ETL pipelines." },
+      "ds-6": { url: "https://roadmap.sh/python-data-analysis", freshman: "Create clean bar charts and line charts using Matplotlib with proper labels and legends.", core: "Data storytelling principles, Streamlit/Plotly interactive web dashboards, and drill-down filters.", industry: "Enterprise semantic layers, metric stores, and executive KPI design for high-level decision makers." },
+      "ds-7": { url: "https://roadmap.sh/devops", freshman: "Understand the difference between batch processing (overnight reports) and real-time live events.", core: "Apache Kafka topics and partitions, event producers/consumers, sliding and tumbling windows.", industry: "Apache Flink exactly-once stateful stream analytics, watermarking out-of-order data, and real-time fraud alerts." },
+      "ds-8": { url: "https://roadmap.sh/ai-data-scientist", freshman: "Learn why 'ice cream sales correlation with drowning' is not causation (hidden temperature confounder).", core: "Directed Acyclic Graphs (DAGs), backdoor path criteria, and Propensity Score Matching.", industry: "Synthetic controls, Difference-in-Differences econometrics, and uplift modeling for targeted user incentives." },
+      "ds-9": { url: "https://roadmap.sh/databases", freshman: "Understand why organizations need clear documentation and rules on where customer data lives.", core: "dbt (data build tool) DAG models, staging vs dimensional marts, automated schema tests, and git workflows.", industry: "Enterprise data lineage tracking, GDPR/CCPA automated compliance, and enterprise feature stores (Feast)." },
+
+      "sec-1": { url: "https://roadmap.sh/cyber-security", freshman: "Learn how the internet works: IP addresses, MAC addresses, DNS, and opening ports in your home router.", core: "Wireshark packet capture analysis, TCP flags (SYN, ACK, FIN, RST), ARP spoofing, and subnetting.", industry: "Network Intrusion Detection (Snort/Suricata), BGP route hijacking defenses, and deep packet inspection." },
+      "sec-2": { url: "https://roadmap.sh/shell-bash", freshman: "Learn basic Linux terminal commands: ls, cd, cat, grep, nano, and file directory layout.", core: "File permissions (chmod, chown), SUID/SGID bits, systemd services, and automated Bash scripts.", industry: "Linux kernel hardening (grsecurity), AppArmor/SELinux mandatory access control, and auditd forensic logging." },
+      "sec-3": { url: "https://roadmap.sh/cyber-security", freshman: "Learn the difference between encoding (Base64), hashing (SHA-256), and encryption (AES).", core: "Symmetric AES-256 encryption, asymmetric RSA/ECC public-private keypairs, and digital certificates.", industry: "Authenticated encryption (AES-GCM), post-quantum cryptography, and hardware security modules (HSM)." },
+      "sec-4": { url: "https://roadmap.sh/cyber-security", freshman: "Understand how web browsers talk to web servers and inspect HTTP headers in Developer Tools.", core: "OWASP Top 10 vulnerabilities: SQL Injection, Stored/Reflected XSS, CSRF tokens, and Burp Suite proxy.", industry: "Server-Side Request Forgery (SSRF) cloud metadata attacks, OAuth2/OIDC exploits, and CSP bypasses." },
+      "sec-5": { url: "https://roadmap.sh/cyber-security", freshman: "Understand ethical hacking: permissions, authorization, and responsible disclosure ethics.", core: "Nmap port scanning, vulnerability scanning (Nessus), Metasploit basics, and Linux privilege escalation.", industry: "Active Directory lateral movement (Kerberoasting, BloodHound), living-off-the-land (LOLBins), and red teaming." },
+      "sec-6": { url: "https://roadmap.sh/devops", freshman: "Learn what a Security Operations Center (SOC) does and why security logs are analyzed.", core: "SIEM event log analysis (Splunk/Elastic), Sigma detection rules, and incident response playbooks.", industry: "Threat hunting with MITRE ATT&CK, EDR behavioral detections, and automated SOAR response workflows." },
+      "sec-7": { url: "https://roadmap.sh/cyber-security", freshman: "Understand how source code compiles into binary 0s and 1s with x86 assembly instructions.", core: "Ghidra decompiler basics, GDB dynamic debugging, PE file headers, and identifying XOR loops.", industry: "Anti-debugging/anti-VM evasion bypasses, memory unpacking, and zero-day vulnerability discovery." },
+      "sec-8": { url: "https://roadmap.sh/devops", freshman: "Understand why passwords should never be written directly inside Git code repositories.", core: "AWS IAM least privilege policies, Docker image security scanning (Trivy), and secret scanning (TruffleHog).", industry: "Infrastructure as Code (Terraform) security guardrails, Kubernetes admission controllers, and zero trust networks." },
+      "sec-9": { url: "https://roadmap.sh/cyber-security", freshman: "Understand how computer memory buffers work and what happens when an input exceeds buffer size.", core: "Stack buffer overflows, overwriting instruction pointers (EIP/RIP), and shellcode execution in VMs.", industry: "Return-Oriented Programming (ROP) gadget chains, ASLR/DEP bypasses, and heap exploitation techniques." }
+    };
+
     /* Drawer Inspector */
     function openDrawer(skillId) {
       activeSkillId = skillId;
@@ -4010,6 +4077,7 @@ p.sendline(payload)`,
       if (!skill) return;
 
       const state = getSkillState(skill);
+      const meta = ROADMAP_MAP[skill.id] || { url: "https://roadmap.sh/roadmaps", freshman: "Start with absolute basics, zero assumptions.", core: "Core architectural mechanics and algorithmic execution.", industry: "Staff engineering, fault tolerance, and scaling." };
 
       document.getElementById('d-tier-chip').textContent = `LEVEL 0${skill.level} // TIER ${skill.level}`;
       document.getElementById('d-title').textContent = skill.name;
@@ -4039,7 +4107,11 @@ p.sendline(payload)`,
         });
       }
 
-      // Tab 2: Study Guide
+      // Tab 2: Study Guide & Step-by-Step Zero Jumps Progression
+      document.getElementById('d-step-beginner').textContent = meta.freshman;
+      document.getElementById('d-step-core').textContent = meta.core;
+      document.getElementById('d-step-industry').textContent = meta.industry;
+
       if (skill.studyGuide) {
         document.getElementById('d-study-concept').innerHTML = skill.studyGuide.concept;
         const qaUl = document.getElementById('d-study-qa');
@@ -4062,6 +4134,25 @@ p.sendline(payload)`,
       // Tab 4: Resources
       const resBox = document.getElementById('d-resources');
       resBox.innerHTML = '';
+
+      // Direct roadmap.sh Reference Card
+      const roadmapUrl = skill.roadmapShUrl || "https://roadmap.sh/roadmaps";
+      const rItem = document.createElement('a');
+      rItem.href = roadmapUrl;
+      rItem.target = '_blank';
+      rItem.rel = 'noopener noreferrer';
+      rItem.className = 'resource-card';
+      rItem.style.border = '1px solid var(--amber)';
+      rItem.style.background = 'rgba(245, 158, 11, 0.06)';
+      rItem.innerHTML = `
+        <div>
+          <div style="font-weight: 700; font-size: 14px; color: var(--amber);">🗺️ roadmap.sh Official Guide</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">Interactive Step-by-Step Community Roadmap</div>
+        </div>
+        <span style="color: var(--amber); font-size: 13.5px; font-weight: 700;">Open Track ↗</span>
+      `;
+      resBox.appendChild(rItem);
+
       skill.resources.forEach(r => {
         const item = document.createElement('a');
         item.href = r.url;
