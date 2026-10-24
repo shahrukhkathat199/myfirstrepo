@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHOOSE.YOUR.ROADMAP — Engineering Career Matrix</title>
-  <meta name="description" content="Next-gen interactive 3D engineering skill roadmap. Master Computer Science, AI/ML, Data Science, and Cyber Security with prerequisite graph trees, curated free resources, and verified projects.">
+  <title>CHOOSE.YOUR.ROADMAP — Interactive Engineering Career Matrix</title>
+  <meta name="description" content="Next-gen interactive 3D engineering skill roadmap. From foundation basics to industry-grade engineering roles across Computer Science, AI/ML, Data Science, and Cyber Security.">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CHOOSE.YOUR.ROADMAP — Interactive Engineering Career Matrix">
-  <meta property="og:description" content="Stop tutorial hell. Visualize your engineering career path in 3D with prerequisite trees and verified free resources.">
+  <meta property="og:description" content="From foundation basics to industry-grade engineering roles with interactive 3D skill trees, multi-language study guides, and verified free resources.">
   <meta property="og:type" content="website">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 
-  <!-- Premium Typography: Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- High-Performance Free CDNs -->
+  <!-- Three.js & Confetti from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -31,8 +31,8 @@
       --bg-base: #030712;
       --bg-surface: #0b1120;
       --bg-surface-elevated: #111c34;
-      --bg-glass: rgba(15, 23, 42, 0.72);
-      --bg-glass-hover: rgba(30, 41, 59, 0.85);
+      --bg-glass: rgba(11, 17, 32, 0.78);
+      --bg-glass-hover: rgba(20, 32, 58, 0.9);
 
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-accent: rgba(59, 130, 246, 0.35);
@@ -42,7 +42,7 @@
       --text-secondary: #94a3b8;
       --text-tertiary: #64748b;
 
-      /* Electric Engineering Accents */
+      /* Accents */
       --cyan: #06b6d4;
       --blue: #3b82f6;
       --violet: #8b5cf6;
@@ -58,9 +58,8 @@
       --radius-lg: 20px;
       --radius-full: 9999px;
 
-      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+      --shadow-glass: 0 10px 35px 0 rgba(0, 0, 0, 0.5);
       --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.25);
-
       --transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -68,7 +67,7 @@
       --bg-base: #f8fafc;
       --bg-surface: #ffffff;
       --bg-surface-elevated: #f1f5f9;
-      --bg-glass: rgba(255, 255, 255, 0.82);
+      --bg-glass: rgba(255, 255, 255, 0.85);
       --bg-glass-hover: rgba(241, 245, 249, 0.95);
 
       --border-subtle: rgba(15, 23, 42, 0.08);
@@ -103,26 +102,25 @@
     /* Ambient Background Glows */
     .ambient-glow-1 {
       position: absolute;
-      top: -120px;
-      left: 10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+      top: -100px;
+      left: 15%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.16), transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
     .ambient-glow-2 {
       position: absolute;
-      top: 300px;
+      top: 350px;
       right: 5%;
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.12), transparent 70%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.14), transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Engineering Subtle Grid Pattern */
     .bg-grid {
       position: absolute;
       inset: 0;
@@ -136,7 +134,6 @@
       z-index: 0;
     }
 
-    /* Smooth focus rings */
     :focus-visible {
       outline: 2px solid var(--blue);
       outline-offset: 3px;
@@ -151,7 +148,7 @@
     }
 
     /* ==========================================================================
-       TOP NAVIGATION BAR
+       TOP NAVIGATION
        ========================================================================== */
     .navbar {
       position: sticky;
@@ -161,7 +158,6 @@
       -webkit-backdrop-filter: blur(16px);
       background: var(--bg-glass);
       border-bottom: 1px solid var(--border-subtle);
-      transition: all var(--transition-smooth);
     }
 
     .nav-inner {
@@ -169,7 +165,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
     }
 
     .brand {
@@ -224,7 +220,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       padding: 8px 16px;
       border-radius: var(--radius-sm);
@@ -274,20 +270,20 @@
     }
 
     /* ==========================================================================
-       HERO & 3D INTERACTIVE MATRIX
+       HERO & HYPER 3D VIEWPORT
        ========================================================================== */
     .hero {
-      padding: 48px 0 28px;
+      padding: 44px 0 24px;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 40px;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 36px;
       align-items: center;
     }
 
     @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
-        padding: 32px 0 20px;
+        padding: 28px 0 16px;
       }
     }
 
@@ -296,14 +292,13 @@
       align-items: center;
       gap: 8px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--blue);
       background: rgba(59, 130, 246, 0.1);
       border: 1px solid var(--border-accent);
       padding: 4px 12px;
       border-radius: var(--radius-full);
-      width: fit-content;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .hero-badge-dot {
@@ -321,11 +316,11 @@
     }
 
     .hero-h1 {
-      font-size: clamp(34px, 4.4vw, 54px);
+      font-size: clamp(32px, 4.3vw, 52px);
       font-weight: 800;
-      line-height: 1.1;
+      line-height: 1.12;
       letter-spacing: -0.03em;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .hero-h1 span.gradient {
@@ -335,17 +330,17 @@
     }
 
     .hero-lead {
-      font-size: 16.5px;
+      font-size: 16px;
       color: var(--text-secondary);
       max-width: 520px;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .hero-stats {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 22px;
       flex-wrap: wrap;
     }
 
@@ -356,22 +351,22 @@
 
     .stat-num {
       font-family: var(--font-mono);
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       color: var(--text-primary);
     }
 
     .stat-lbl {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-tertiary);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    /* 3D Canvas Box */
+    /* 3D Viewport Box */
     .canvas-card {
       position: relative;
-      height: 380px;
+      height: 400px;
       background: var(--bg-surface);
       border: 1px solid var(--border-accent);
       border-radius: var(--radius-lg);
@@ -403,7 +398,7 @@
     .hud-tag {
       font-family: var(--font-mono);
       font-size: 11px;
-      background: rgba(3, 7, 18, 0.75);
+      background: rgba(3, 7, 18, 0.78);
       backdrop-filter: blur(8px);
       padding: 3px 9px;
       border-radius: 6px;
@@ -411,52 +406,112 @@
       color: var(--text-secondary);
     }
 
+    .hud-warp-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid var(--border-accent);
+      color: var(--blue);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      z-index: 5;
+      transition: all 0.2s;
+    }
+    .hud-warp-btn:hover {
+      background: var(--blue);
+      color: #fff;
+    }
+
     .hud-tip {
       position: absolute;
       bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 16px;
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-tertiary);
       background: rgba(3, 7, 18, 0.7);
       backdrop-filter: blur(8px);
-      padding: 4px 12px;
-      border-radius: var(--radius-full);
+      padding: 4px 10px;
+      border-radius: 6px;
       pointer-events: none;
-      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       INDUSTRY ROLES SELECTOR BAR
+       ========================================================================== */
+    .roles-bar-wrap {
+      margin: 28px 0 20px;
+      padding: 16px 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .roles-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .roles-title {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .role-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .role-pill {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-smooth);
+    }
+    .role-pill:hover {
+      border-color: var(--border-accent);
+      color: var(--text-primary);
+    }
+    .role-pill.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
     }
 
     /* ==========================================================================
        DISCIPLINE TABS
        ========================================================================== */
-    .branch-nav-wrap {
-      margin: 32px 0 24px;
-    }
-
-    .branch-nav-label {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-tertiary);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .branch-nav-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border-subtle);
-    }
-
     .branch-cards {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
+      margin-bottom: 24px;
     }
 
     @media (max-width: 900px) {
@@ -555,7 +610,6 @@
       }
     }
 
-    /* Recommended Target Spotlight */
     .spotlight-card {
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), var(--bg-surface));
       border: 1px solid rgba(245, 158, 11, 0.4);
@@ -611,7 +665,6 @@
       max-width: 480px;
     }
 
-    /* Progress Ring Widget */
     .progress-widget {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -797,7 +850,7 @@
     }
 
     /* ==========================================================================
-       VIEW 1: GRAPH VIEW (CONNECTED WIRE TREE)
+       VIEW 1: GRAPH VIEW
        ========================================================================== */
     .graph-view-card {
       background: var(--bg-surface);
@@ -894,6 +947,11 @@
     .tree-node.locked {
       opacity: 0.55;
       cursor: not-allowed;
+    }
+
+    .tree-node.role-highlight {
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(6, 182, 212, 0.5);
     }
 
     .node-icon {
@@ -1020,6 +1078,11 @@
       opacity: 0.6;
     }
 
+    .skill-box.role-highlight {
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(6, 182, 212, 0.4);
+    }
+
     .box-top {
       display: flex;
       align-items: flex-start;
@@ -1099,7 +1162,7 @@
     }
 
     /* ==========================================================================
-       SIDE PANEL INSPECTOR (SLIDE DRAWER)
+       DRAWER INSPECTOR (STUDY GUIDES & PRODUCTION CODE TABS)
        ========================================================================== */
     .drawer-overlay {
       position: fixed;
@@ -1122,7 +1185,7 @@
       right: 0;
       bottom: 0;
       width: 100%;
-      max-width: 520px;
+      max-width: 580px;
       background: var(--bg-surface);
       border-left: 1px solid var(--border-accent);
       box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
@@ -1138,7 +1201,7 @@
     }
 
     .drawer-top {
-      padding: 24px;
+      padding: 22px 24px;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: flex-start;
@@ -1151,9 +1214,39 @@
     }
 
     .drawer-title {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       margin-top: 4px;
+    }
+
+    /* Tabs inside Drawer */
+    .drawer-nav-tabs {
+      display: flex;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 24px;
+      position: sticky;
+      top: 90px;
+      z-index: 9;
+    }
+
+    .d-tab-btn {
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .d-tab-btn:hover {
+      color: var(--text-primary);
+    }
+    .d-tab-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
     }
 
     .drawer-content {
@@ -1206,6 +1299,57 @@
       border-color: var(--blue);
     }
 
+    .study-box {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .study-box h4 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .study-box p, .study-box li {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .study-box ul {
+      margin-left: 18px;
+    }
+
+    /* Code Snippet Block */
+    .code-block {
+      background: #010409;
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: #38bdf8;
+      line-height: 1.5;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
     .resource-card {
       display: flex;
       align-items: center;
@@ -1240,7 +1384,7 @@
     }
 
     .drawer-actions {
-      padding: 20px 24px;
+      padding: 18px 24px;
       background: var(--bg-surface-elevated);
       border-top: 1px solid var(--border-subtle);
       margin-top: auto;
@@ -1248,10 +1392,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
+      position: sticky;
+      bottom: 0;
     }
 
     /* ==========================================================================
-       MODALS: ABOUT (JUDGE CASE STUDY) & TROPHIES
+       MODALS: JUDGES CASE STUDY & TROPHIES
        ========================================================================== */
     .modal-backdrop {
       position: fixed;
@@ -1335,7 +1481,6 @@
       margin-bottom: 6px;
     }
 
-    /* Badges */
     .badge-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -1369,7 +1514,6 @@
       font-size: 26px;
     }
 
-    /* Footer */
     .footer {
       border-top: 1px solid var(--border-subtle);
       padding: 28px 24px;
@@ -1403,7 +1547,7 @@
         </div>
         <div class="brand-title">
           <span>CHOOSE.YOUR.ROADMAP</span>
-          <span class="brand-pill">PREMIUM 2026</span>
+          <span class="brand-pill">SYSTEM MATRIX</span>
         </div>
       </div>
 
@@ -1440,19 +1584,19 @@
   <main class="container">
 
     <!-- ==========================================================================
-         HERO SECTION: 3D INTERACTIVE MATRIX
+         HERO SECTION: HYPER 3D MATRIX
          ========================================================================== -->
     <header class="hero">
       <div class="hero-left">
         <div class="hero-badge">
           <span class="hero-badge-dot"></span>
-          <span>ENGINEERING CURRICULUM ARCHITECTURE</span>
+          <span>BASIC TO PRODUCTION-GRADE ENGINEERING</span>
         </div>
         <h1 class="hero-h1">
-          Architect Your Engineering Career, <span class="gradient">Node by Node.</span>
+          From Foundations to <span class="gradient">Staff Engineer.</span>
         </h1>
         <p class="hero-lead">
-          Eliminate tutorial paralysis. Traverse prerequisites with our 3D interactive matrix, master verified free curricula, and build portfolio projects that impress tech recruiters.
+          Stop tutorial paralysis. Traverse verified prerequisites in a 3D isometric universe, explore multi-language production code (C++, Rust, Go, Python), and build verifiable portfolio projects.
         </p>
 
         <div class="hero-stats">
@@ -1479,14 +1623,31 @@
         </div>
         <canvas id="three-viewport"></canvas>
         <div class="hud-tip">Hover or drag to tilt in 3D • Click any node to inspect</div>
+        <button class="hud-warp-btn" onclick="triggerHyperWarp()" title="Trigger 3D Hyper-Warp Animation">⚡ Warp Fly-in</button>
       </div>
     </header>
+
+    <!-- ==========================================================================
+       INDUSTRY ROLES TARGET SELECTOR
+       ========================================================================== -->
+    <section class="roles-bar-wrap" aria-label="Filter by Target Career Role">
+      <div class="roles-header">
+        <span class="roles-title">🎯 Target Industry Role Path</span>
+        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">Click a role to illuminate required milestones</span>
+      </div>
+      <div class="role-pills-row" role="group">
+        <button class="role-pill active" onclick="selectRole('all', this)">All Disciplines</button>
+        <button class="role-pill" onclick="selectRole('systems', this)">⚙️ Systems / Kernel Architect (C/C++, Rust)</button>
+        <button class="role-pill" onclick="selectRole('ai-eng', this)">🤖 Generative AI & LLM Engineer (PyTorch, RAG)</button>
+        <button class="role-pill" onclick="selectRole('data-platform', this)">📊 Big Data & Streaming Architect (Spark, Kafka)</button>
+        <button class="role-pill" onclick="selectRole('red-team', this)">🛡️ Red Team & Exploit Engineer (Burp, Ghidra)</button>
+      </div>
+    </section>
 
     <!-- ==========================================================================
        BRANCH SELECTOR
        ========================================================================== -->
     <section class="branch-nav-wrap">
-      <div class="branch-nav-label">Select Engineering Specialization</div>
       <div class="branch-cards" role="tablist">
         <div class="branch-card active" id="tab-cse" onclick="switchBranch('cse')" role="tab" tabindex="0">
           <div class="branch-icon-box">💻</div>
@@ -1523,7 +1684,7 @@
     </section>
 
     <!-- ==========================================================================
-       DASHBOARD HUD: SPOTLIGHT & PROGRESS RING
+       DASHBOARD HUD: SPOTLIGHT & PROGRESS
        ========================================================================== -->
     <section class="dashboard-hud">
       <!-- Next Target Spotlight -->
@@ -1601,7 +1762,6 @@
       </div>
       <div class="graph-stage" id="graph-stage">
         <svg id="svg-wires" aria-hidden="true"></svg>
-        <!-- Nodes populated via JS -->
       </div>
     </div>
 
@@ -1649,7 +1809,7 @@
   </main>
 
   <!-- ==========================================================================
-       SIDE PANEL INSPECTOR
+       SIDE PANEL INSPECTOR (STUDY GUIDES & PRODUCTION CODE TABS)
        ========================================================================== -->
   <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawerBackdrop(event)">
     <aside class="drawer-dialog" role="dialog" aria-modal="true" aria-labelledby="d-title">
@@ -1661,37 +1821,82 @@
         <button class="btn-icon" onclick="closeDrawerDirect()" aria-label="Close Inspector">✕</button>
       </div>
 
+      <!-- Drawer Sub-Navigation Tabs -->
+      <div class="drawer-nav-tabs">
+        <button class="d-tab-btn active" id="tab-d-overview" onclick="switchDrawerTab('overview')">Overview</button>
+        <button class="d-tab-btn" id="tab-d-study" onclick="switchDrawerTab('study')">Study Guide</button>
+        <button class="d-tab-btn" id="tab-d-code" onclick="switchDrawerTab('code')">Code & Systems</button>
+        <button class="d-tab-btn" id="tab-d-resources" onclick="switchDrawerTab('resources')">Resources & Project</button>
+      </div>
+
       <div class="drawer-content">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span class="box-badge badge-ready" id="d-status-pill">READY TO START</span>
-          <span style="font-family: var(--font-mono); font-size: 13px; color: var(--text-tertiary);" id="d-time-txt">⏱ 40 Hours Required</span>
+        <!-- TAB 1: OVERVIEW -->
+        <div id="d-pane-overview" style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span class="box-badge badge-ready" id="d-status-pill">READY TO START</span>
+            <span style="font-family: var(--font-mono); font-size: 13px; color: var(--text-tertiary);" id="d-time-txt">⏱ 40 Hours Required</span>
+          </div>
+
+          <div>
+            <div class="drawer-label">Curriculum Description</div>
+            <p id="d-desc" style="color: var(--text-secondary); font-size: 14.5px;"></p>
+          </div>
+
+          <div>
+            <div class="drawer-label">Why It Matters in Production</div>
+            <div class="why-callout" id="d-why"></div>
+          </div>
+
+          <div>
+            <div class="drawer-label">Prerequisites</div>
+            <div class="prereqs-chips" id="d-prereqs"></div>
+          </div>
         </div>
 
-        <div>
-          <div class="drawer-label">Description</div>
-          <p id="d-desc" style="color: var(--text-secondary); font-size: 14.5px;"></p>
+        <!-- TAB 2: STUDY GUIDE & INTERVIEW MENTAL MODELS -->
+        <div id="d-pane-study" style="display: none; flex-direction: column; gap: 16px;">
+          <div class="study-box">
+            <h4>💡 Core Mental Model</h4>
+            <p id="d-study-concept"></p>
+          </div>
+          <div class="study-box">
+            <h4>🎯 Key Interview Questions & Answers</h4>
+            <ul id="d-study-qa" style="display: flex; flex-direction: column; gap: 8px;"></ul>
+          </div>
+          <div class="study-box">
+            <h4>⚠️ Common Production Pitfalls</h4>
+            <p id="d-study-pitfall" style="color: var(--rose);"></p>
+          </div>
         </div>
 
-        <div>
-          <div class="drawer-label">Why It Matters to Engineers</div>
-          <div class="why-callout" id="d-why"></div>
+        <!-- TAB 3: PRODUCTION CODE & SYSTEMS -->
+        <div id="d-pane-code" style="display: none; flex-direction: column; gap: 16px;">
+          <div>
+            <div class="code-header">
+              <span id="d-code-lang">PRODUCTION PATTERN</span>
+              <span>SYNTAX HIGHLIGHTED</span>
+            </div>
+            <pre class="code-block"><code id="d-code-snippet">// Code snippet</code></pre>
+          </div>
+          <div class="study-box">
+            <h4>⚡ Industry Performance Notes</h4>
+            <p id="d-code-notes"></p>
+          </div>
         </div>
 
-        <div>
-          <div class="drawer-label">Prerequisites</div>
-          <div class="prereqs-chips" id="d-prereqs"></div>
-        </div>
+        <!-- TAB 4: RESOURCES & PROJECT -->
+        <div id="d-pane-resources" style="display: none; flex-direction: column; gap: 20px;">
+          <div>
+            <div class="drawer-label">Verified Free University & Industry Resources</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="d-resources"></div>
+          </div>
 
-        <div>
-          <div class="drawer-label">Curated Free Resources</div>
-          <div style="display: flex; flex-direction: column; gap: 8px;" id="d-resources"></div>
-        </div>
-
-        <div>
-          <div class="drawer-label">Hands-On Mini Project</div>
-          <div class="project-card">
-            <div class="project-card-title" id="d-proj-title">Project Title</div>
-            <p id="d-proj-desc" style="font-size: 13.5px; color: var(--text-secondary);"></p>
+          <div>
+            <div class="drawer-label">Hands-On Portfolio Mini Project</div>
+            <div class="project-card">
+              <div class="project-card-title" id="d-proj-title">Project Title</div>
+              <p id="d-proj-desc" style="font-size: 13.5px; color: var(--text-secondary);"></p>
+            </div>
           </div>
         </div>
       </div>
@@ -1723,7 +1928,7 @@
           <div class="case-box">
             <div class="case-lbl">01 // Problem Statement</div>
             <p style="font-size: 13px; color: var(--text-secondary);">
-              Static PNG roadmaps induce cognitive overload. Students get trapped in tutorials without understanding prerequisite dependency or building genuine systems.
+              Static PNG roadmaps induce cognitive overload. Students get trapped in tutorials without understanding prerequisite dependencies or building genuine systems.
             </p>
           </div>
 
@@ -1783,9 +1988,8 @@
   </footer>
 
   <!-- ==========================================================================
-       APPLICATION LOGIC & DATA
-       ========================================================================== */
-  -->
+       APPLICATION DATA & CODE (WITH POWERFUL LANGUAGES)
+       ========================================================================== -->
   <script>
     const DATA = {
       cse: {
@@ -1799,16 +2003,49 @@
             name: "Programming Fundamentals & Memory",
             icon: "⚡",
             timeEst: "40 hrs",
-            whyItMatters: "High-level languages hide pointers and cache behavior. Mastering memory management in C/C++ prevents subtle runtime vulnerabilities.",
+            roles: ["systems", "ai-eng"],
+            whyItMatters: "High-level languages hide pointers and cache behavior. Mastering memory management in C/C++ prevents subtle runtime vulnerabilities and memory leaks.",
             description: "Pointers, stack vs heap allocation, reference semantics, and compilation lifecycle.",
             prerequisites: [],
+            studyGuide: {
+              concept: "Stack memory is fast, automatically managed, but limited in size. Heap memory is flexible, manually allocated (malloc/free or new/delete), but susceptible to memory leaks and fragmentation.",
+              qa: [
+                "<strong>Q: What causes a segmentation fault?</strong><br>A: Accessing memory that your process does not own or has already freed (e.g. dereferencing a NULL or dangling pointer).",
+                "<strong>Q: Why is cache locality important?</strong><br>A: Sequential memory access in arrays allows the CPU hardware prefetcher to load contiguous cache lines into L1/L2 cache, making operations 10x faster than pointer jumping."
+              ],
+              pitfall: "Failing to check if malloc returned NULL in C, or forgetting to free heap allocations leading to production server memory exhaustion."
+            },
+            codeSnippet: {
+              lang: "C / C++ (Memory Arena Allocator)",
+              code: `// Low-overhead memory arena pattern in C/C++
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    char *buffer;
+    size_t capacity;
+    size_t offset;
+} Arena;
+
+void* arena_alloc(Arena *a, size_t size) {
+    if (a->offset + size > a->capacity) return NULL; // Out of memory
+    void *ptr = &a->buffer[a->offset];
+    a->offset += (size + 7) & ~7; // 8-byte alignment
+    return ptr;
+}
+
+void arena_reset(Arena *a) {
+    a->offset = 0; // O(1) instant free of all allocations!
+}`,
+              notes: "Arena allocation completely eliminates malloc/free overhead for per-frame or per-request cycles."
+            },
             resources: [
               { name: "Harvard CS50x (Free Complete Course)", type: "Video Lectures", url: "https://cs50.harvard.edu/x/" },
               { name: "C Programming Bootcamp (freeCodeCamp)", type: "Hands-on Code", url: "https://www.youtube.com/watch?v=KJgsSFOSQv0" }
             ],
             miniProject: {
-              title: "Dynamic Array & Memory Pool",
-              desc: "Build a custom dynamic array in C with automated resize semantics and Valgrind memory leak verification."
+              title: "Dynamic Memory Pool & Arena",
+              desc: "Build a custom dynamic memory arena in C with automated resize semantics and Valgrind memory leak verification."
             }
           },
           {
@@ -1817,8 +2054,34 @@
             name: "Data Structures & Complexity",
             icon: "🌲",
             timeEst: "50 hrs",
+            roles: ["systems", "ai-eng", "data-platform"],
             whyItMatters: "Software trades space against time. Choosing the right data structure separates script writers from genuine systems engineers.",
             description: "Big-O analysis, balanced BSTs, heaps, hash maps, graph traversals (BFS/DFS), and dynamic programming.",
+            studyGuide: {
+              concept: "Hash maps provide average O(1) lookups via hash functions, while trees (AVL, Red-Black) guarantee strict O(log N) worst-case bounds with ordered iteration.",
+              qa: [
+                "<strong>Q: When would you pick a Red-Black tree over a Hash Map?</strong><br>A: When you require guaranteed O(log N) worst-case time (no hash collision attacks) or need sorted in-order traversal.",
+                "<strong>Q: What is the difference between BFS and DFS?</strong><br>A: BFS uses a Queue to find the shortest unweighted path; DFS uses a Stack/recursion for exhaustive path exploration and topological sorting."
+              ],
+              pitfall: "Assuming hash map lookup is always O(1) without considering high hash collision rates or rehash resizing spikes."
+            },
+            codeSnippet: {
+              lang: "Rust (Memory-Safe Binary Heap Priority Queue)",
+              code: `use std::collections::BinaryHeap;
+use std::cmp::Reverse;
+
+fn find_kth_largest(nums: Vec<i32>, k: usize) -> i32 {
+    let mut min_heap = BinaryHeap::new();
+    for num in nums {
+        min_heap.push(Reverse(num));
+        if min_heap.len() > k {
+            min_heap.pop();
+        }
+    }
+    min_heap.peek().unwrap().0
+}`,
+              notes: "Rust guarantees thread safety and eliminates data races at compile time with zero garbage collection pause."
+            },
             prerequisites: ["cse-1"],
             resources: [
               { name: "NeetCode Interactive Roadmap", type: "Interactive Guide", url: "https://neetcode.io/roadmap" },
@@ -1835,8 +2098,32 @@
             name: "Computer Architecture & Organization",
             icon: "🎛️",
             timeEst: "35 hrs",
+            roles: ["systems"],
             whyItMatters: "Understanding logic gates, registers, and pipelining explains why cache locality dictates real execution speed.",
             description: "ALU architecture, CPU registers, assembly language, and memory caching hierarchies.",
+            studyGuide: {
+              concept: "Instructions pass through fetch, decode, execute, memory access, and writeback pipelining stages. Branch predictors speculate future branch outcomes to prevent pipeline stalls.",
+              qa: [
+                "<strong>Q: Why does sorting an array speed up conditional loops?</strong><br>A: Branch predictors correctly guess sorted boolean outcomes, avoiding expensive 15-20 cycle pipeline flush penalties.",
+                "<strong>Q: What is false sharing in multicore caches?</strong><br>A: When two CPU cores modify independent variables located on the exact same 64-byte cache line, causing constant cache invalidation."
+              ],
+              pitfall: "Writing algorithms that jump randomly through memory, causing frequent L1/L2 cache misses."
+            },
+            codeSnippet: {
+              lang: "x86-64 Assembly / C Inline (SIMD Vectorization)",
+              code: `// Process 8 floats simultaneously with AVX2 SIMD in C
+#include <immintrin.h>
+
+void vector_add(const float *a, const float *b, float *c, int n) {
+    for (int i = 0; i < n; i += 8) {
+        __m256 va = _mm256_loadu_ps(&a[i]);
+        __m256 vb = _mm256_loadu_ps(&b[i]);
+        __m256 vc = _mm256_add_ps(va, vb);
+        _mm256_storeu_ps(&c[i], vc);
+    }
+}`,
+              notes: "AVX2 SIMD vector instructions deliver up to 8x throughput increases for mathematical workloads."
+            },
             prerequisites: ["cse-1"],
             resources: [
               { name: "From NAND to Tetris", type: "Hardware Course", url: "https://www.nand2tetris.org/" },
@@ -1853,8 +2140,38 @@
             name: "Operating Systems & Concurrency",
             icon: "⚙️",
             timeEst: "45 hrs",
+            roles: ["systems", "data-platform"],
             whyItMatters: "Multicore processors demand mutexes, virtual memory, and context switches to prevent race conditions and deadlocks.",
             description: "Processes, threads, POSIX system calls, virtual memory paging, scheduling, and synchronization.",
+            studyGuide: {
+              concept: "Virtual memory maps process addresses to physical RAM via page tables with TLB caching. Concurrency coordinates multiple execution contexts with mutexes, semaphores, and atomics.",
+              qa: [
+                "<strong>Q: What are the 4 Coffman conditions for deadlock?</strong><br>A: Mutual exclusion, hold and wait, no preemption, and circular wait. Breaking any one condition prevents deadlocks.",
+                "<strong>Q: What is the difference between a process and a thread?</strong><br>A: Processes have isolated virtual address spaces; threads within a process share the same heap and code memory."
+              ],
+              pitfall: "Lock ordering inconsistency across functions resulting in fatal production deadlocks."
+            },
+            codeSnippet: {
+              lang: "Go (Thread-Safe Concurrent Worker Pool)",
+              code: `package main
+import "sync"
+
+func WorkerPool(jobs <-chan int, results chan<- int, numWorkers int) {
+    var wg sync.WaitGroup
+    for w := 1; w <= numWorkers; w++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            for j := range jobs {
+                results <- j * 2 // Process job
+            }
+        }()
+    }
+    wg.Wait()
+    close(results)
+}`,
+              notes: "Go goroutines multiplex millions of concurrent tasks on a small thread pool with low stack footprint."
+            },
             prerequisites: ["cse-2", "cse-3"],
             resources: [
               { name: "Operating Systems: Three Easy Pieces", type: "Free Book", url: "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
@@ -1871,8 +2188,33 @@
             name: "Database Systems & Storage Engines",
             icon: "🗄️",
             timeEst: "40 hrs",
+            roles: ["systems", "data-platform"],
             whyItMatters: "ACID guarantees, B-Trees, and write-ahead logs dictate scalable persistence for enterprise systems.",
             description: "Relational data modeling, SQL indexing internals, transaction isolation, and query plans.",
+            studyGuide: {
+              concept: "Databases use B+ Trees for fast range queries on disk, and Write-Ahead Logging (WAL) to guarantee durability before flushing pages to permanent storage.",
+              qa: [
+                "<strong>Q: Why do B+ Trees store data only in leaf nodes?</strong><br>A: Internal nodes hold only index keys, maximizing branching factor and fitting more pointers per disk block page.",
+                "<strong>Q: What is the difference between Read Committed and Serializable isolation?</strong><br>A: Read Committed prevents dirty reads; Serializable eliminates phantom reads and ensures transactions behave as if executed serially."
+              ],
+              pitfall: "Running queries on unindexed columns causing table-wide disk scans under heavy load."
+            },
+            codeSnippet: {
+              lang: "SQL (Optimized Compound Index & Window Function)",
+              code: `-- High-performance window analytics with index coverage
+SELECT 
+    department_id,
+    employee_name,
+    salary,
+    DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) as rank_in_dept
+FROM employees
+WHERE is_active = TRUE
+ORDER BY department_id, rank_in_dept;
+
+-- Covered compound index:
+-- CREATE INDEX idx_emp_dept_salary ON employees (department_id, is_active, salary DESC);`,
+              notes: "Covered indexes allow database engines to fulfill queries directly from the index tree without fetching row data from disk."
+            },
             prerequisites: ["cse-2"],
             resources: [
               { name: "CMU 15-445: Database Systems", type: "Video Lectures", url: "https://15445.courses.cs.cmu.edu/" },
@@ -1889,8 +2231,43 @@
             name: "Computer Networking & Protocols",
             icon: "🌐",
             timeEst: "35 hrs",
+            roles: ["systems", "red-team"],
             whyItMatters: "All cloud applications depend on the TCP/IP stack. Understanding sockets, TLS, and HTTP/3 is mandatory.",
             description: "OSI model, DNS, TCP congestion control, UDP, WebSockets, and packet encapsulation.",
+            studyGuide: {
+              concept: "TCP provides reliable, ordered, byte-stream delivery via 3-way handshakes and sliding window flow control. UDP prioritizes raw speed and lower latency without retransmissions.",
+              qa: [
+                "<strong>Q: How does TCP handle congestion?</strong><br>A: Through Slow Start, Congestion Avoidance, Fast Retransmit, and Fast Recovery (e.g. cubic or BBR algorithms).",
+                "<strong>Q: Why does HTTP/3 use QUIC over UDP instead of TCP?</strong><br>A: QUIC eliminates Head-of-Line blocking across multiplexed streams and supports 0-RTT connection resumption."
+              ],
+              pitfall: "Opening a new TCP/TLS connection for every API call instead of using connection pooling."
+            },
+            codeSnippet: {
+              lang: "Python / C Sockets (Low-Latency Non-Blocking Socket)",
+              code: `import socket
+import select
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.setblocking(False)
+server.bind(('0.0.0.0', 8080))
+server.listen(128)
+
+# Non-blocking event loop using OS select/epoll
+inputs = [server]
+while inputs:
+    readable, _, _ = select.select(inputs, [], [])
+    for s in readable:
+        if s is server:
+            client, addr = s.accept()
+            client.setblocking(False)
+            inputs.append(client)
+        else:
+            data = s.recv(1024)
+            if data: s.sendall(b"HTTP/1.1 200 OK\\r\\n\\r\\nPONG")
+            else: inputs.remove(s); s.close()`,
+              notes: "Non-blocking event-driven sockets handle tens of thousands of idle connections without thread overhead."
+            },
             prerequisites: ["cse-4"],
             resources: [
               { name: "Stanford CS144: Computer Networks", type: "Course Syllabus", url: "https://cs144.github.io/" },
@@ -1907,8 +2284,40 @@
             name: "Distributed Systems & Cloud Architecture",
             icon: "☁️",
             timeEst: "50 hrs",
+            roles: ["systems", "data-platform"],
             whyItMatters: "Single servers fail. Consensus protocols (Raft, Paxos) and CAP theorem power fault-tolerant cloud platforms.",
             description: "Raft consensus, replication, sharding, event-driven architectures, and microservices.",
+            studyGuide: {
+              concept: "Distributed systems must accept network partitions (CAP theorem). Consensus algorithms (Raft) elect leaders and replicate logs across majorities to guarantee strong consistency.",
+              qa: [
+                "<strong>Q: What is split-brain in distributed systems?</strong><br>A: When network partitions isolate nodes and two partitions elect their own leader simultaneously. Solved with odd-numbered quorums (N/2 + 1).",
+                "<strong>Q: What is the difference between at-least-once and exactly-once processing?</strong><br>A: Exactly-once requires idempotent message handlers or two-phase commits, while at-least-once may retry duplicates."
+              ],
+              pitfall: "Relying on physical machine wall clocks for ordering events instead of Lamport or Vector Clocks."
+            },
+            codeSnippet: {
+              lang: "Go (Raft Heartbeat & Quorum Election Logic)",
+              code: `type RaftNode struct {
+    currentTerm int
+    votedFor    int
+    peers       []string
+}
+
+func (r *RaftNode) RequestVotes() bool {
+    votes := 1 // Vote for self
+    required := len(r.peers)/2 + 1
+    for _, peer := range r.peers {
+        if r.sendVoteRPC(peer, r.currentTerm) {
+            votes++
+            if votes >= required {
+                return true // Elected Leader!
+            }
+        }
+    }
+    return false
+}`,
+              notes: "Quorum-based elections guarantee that only one valid leader can update state per term."
+            },
             prerequisites: ["cse-4", "cse-6"],
             resources: [
               { name: "MIT 6.824: Distributed Systems", type: "MIT Lectures", url: "https://pdos.csail.mit.edu/6.824/" },
@@ -1925,8 +2334,31 @@
             name: "Compiler Design & Language Engineering",
             icon: "🔍",
             timeEst: "45 hrs",
+            roles: ["systems"],
             whyItMatters: "Building a compiler demystifies how code becomes machine execution through abstract syntax trees.",
             description: "Lexing, recursive descent parsing, symbol tables, bytecode, and LLVM intermediate representation.",
+            studyGuide: {
+              concept: "Compilers convert characters to tokens (Lexer), tokens to trees (Parser), evaluate types and scope (Semantic Analysis), and emit optimized bytecode or machine code (Codegen).",
+              qa: [
+                "<strong>Q: What is the difference between an AST and a Parse Tree?</strong><br>A: A Parse Tree mirrors grammar rules directly; an AST abstracts away syntactic noise (commas, parentheses) to model operations.",
+                "<strong>Q: What is static single assignment (SSA) form?</strong><br>A: A representation where every variable is assigned exactly once, enabling simple constant propagation and dead code elimination."
+              ],
+              pitfall: "Writing ambiguous context-free grammars that cause shift-reduce parsing conflicts."
+            },
+            codeSnippet: {
+              lang: "Rust / C++ (Recursive Descent Expression Parser)",
+              code: `// Recursive descent arithmetic expression parser
+fn parse_factor(tokens: &mut TokenStream) -> i32 {
+    let tok = tokens.next();
+    if tok.is_number() { tok.value }
+    else if tok.is_open_paren() {
+        let val = parse_expression(tokens);
+        tokens.expect_close_paren();
+        val
+    } else { panic!("Unexpected token"); }
+}`,
+              notes: "Recursive descent parsers are intuitive, efficient, and provide clear compiler error diagnostics."
+            },
             prerequisites: ["cse-2", "cse-4"],
             resources: [
               { name: "Crafting Interpreters", type: "Complete Digital Book", url: "https://craftinginterpreters.com/" },
@@ -1943,8 +2375,40 @@
             name: "High-Performance Computing & Systems",
             icon: "🚀",
             timeEst: "45 hrs",
+            roles: ["systems"],
             whyItMatters: "Achieving ultra-low latency requires SIMD vectorization, cache-line alignment, and lock-free structures.",
             description: "SIMD, cache-oblivious algorithms, GPU compute (CUDA), and lock-free queues.",
+            studyGuide: {
+              concept: "High performance demands eliminating cache misses, memory allocations, and synchronization locks using hardware atomic operations (Compare-And-Swap).",
+              qa: [
+                "<strong>Q: How do lock-free queues avoid locks?</strong><br>A: By using atomic pointer swaps (Atomic CAS) and memory order fences (Acquire/Release) to mutate head and tail pointers safely.",
+                "<strong>Q: What is NUMA architecture?</strong><br>A: Non-Uniform Memory Access, where CPU access to local memory is faster than accessing memory attached to other physical sockets."
+              ],
+              pitfall: "Introducing lock contention in critical multi-threaded paths, causing high CPU context switch overhead."
+            },
+            codeSnippet: {
+              lang: "C++20 (Lock-Free Atomic SPSC Ring Buffer)",
+              code: `#include <atomic>
+#include <array>
+
+template<typename T, size_t Capacity>
+class SPSCQueue {
+    std::array<T, Capacity> buffer;
+    alignas(64) std::atomic<size_t> head{0}; // Align to cache line
+    alignas(64) std::atomic<size_t> tail{0}; // Avoid false sharing!
+
+public:
+    bool push(const T& item) {
+        size_t current_tail = tail.load(std::memory_order_relaxed);
+        if ((current_tail + 1) % Capacity == head.load(std::memory_order_acquire))
+            return false; // Full
+        buffer[current_tail] = item;
+        tail.store((current_tail + 1) % Capacity, std::memory_order_release);
+        return true;
+    }
+};`,
+              notes: "Cache line alignment (`alignas(64)`) prevents false sharing across concurrent threads."
+            },
             prerequisites: ["cse-7"],
             resources: [
               { name: "Computer Systems: CS:APP Labs", type: "Code Labs", url: "http://csapp.cs.cmu.edu/" },
@@ -1969,9 +2433,43 @@
             name: "Mathematical Foundations for ML",
             icon: "📐",
             timeEst: "45 hrs",
+            roles: ["ai-eng", "data-platform"],
             whyItMatters: "Machine learning is applied linear algebra and calculus. Loss gradients and vector projections govern all models.",
             description: "Matrices, eigenvalues, partial derivatives, chain rule, and probability distributions.",
             prerequisites: [],
+            studyGuide: {
+              concept: "Weights adjust in the direction opposite to the gradient vector of the loss function. Singular Value Decomposition (SVD) and eigenvalues identify dominant axes of variance.",
+              qa: [
+                "<strong>Q: Why is gradient descent computed with partial derivatives?</strong><br>A: Because loss is a multivariate function with millions of parameters; partial derivatives compute the instantaneous rate of change along each parameter axis.",
+                "<strong>Q: What is the geometric interpretation of a matrix multiplication?</strong><br>A: A linear transformation that scales, rotates, and shears coordinate space."
+              ],
+              pitfall: "Using too large a learning rate leading to exploding gradients that diverge from the minimum."
+            },
+            codeSnippet: {
+              lang: "Python / NumPy (Vectorized Gradient Descent)",
+              code: `import numpy as np
+
+def gradient_descent(X, y, lr=0.01, epochs=1000):
+    m, n = X.shape
+    weights = np.zeros(n)
+    bias = 0
+    
+    for _ in range(epochs):
+        # Forward pass: y_pred = Xw + b
+        y_pred = np.dot(X, weights) + bias
+        error = y_pred - y
+        
+        # Backward pass: Compute analytical gradients
+        dw = (1 / m) * np.dot(X.T, error)
+        db = (1 / m) * np.sum(error)
+        
+        # Parameter update
+        weights -= lr * dw
+        bias -= lr * db
+        
+    return weights, bias`,
+              notes: "Vectorized matrix operations in NumPy run at compiled C speed, executing 100x faster than pure Python loops."
+            },
             resources: [
               { name: "3Blue1Brown: Linear Algebra", type: "Visual Animations", url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" },
               { name: "Mathematics for ML (Imperial)", type: "Coursera Free", url: "https://www.coursera.org/specializations/mathematics-machine-learning" }
@@ -1987,9 +2485,32 @@
             name: "Scientific Computing with Python",
             icon: "🐍",
             timeEst: "35 hrs",
+            roles: ["ai-eng", "data-platform"],
             whyItMatters: "NumPy and Pandas provide vectorized operations at compiled C speed, powering data manipulation.",
             description: "N-dimensional arrays, vectorization, Pandas DataFrames, and data cleaning.",
             prerequisites: ["ai-1"],
+            studyGuide: {
+              concept: "Vectorization replaces explicit Python for-loops with contiguous C memory buffers and SIMD hardware instructions.",
+              qa: [
+                "<strong>Q: Why is iterating over a Pandas DataFrame with iterrows() considered bad practice?</strong><br>A: It boxes each row into a Python Series object, causing millions of object allocation overheads instead of vectorized column ops.",
+                "<strong>Q: What is broadcasting in NumPy?</strong><br>A: Rules that allow arithmetic operations on arrays of differing shapes by stretching matching dimensions."
+              ],
+              pitfall: "Copying massive DataFrames in memory repeatedly without setting `inplace=True` or using generators."
+            },
+            codeSnippet: {
+              lang: "Python / Pandas (High-Throughput Feature Pipeline)",
+              code: `import pandas as pd
+import numpy as np
+
+def clean_and_engineer(df: pd.DataFrame) -> pd.DataFrame:
+    # Vectorized missing value imputation and clipping
+    df['salary'] = df['salary'].fillna(df.groupby('dept')['salary'].transform('median'))
+    df['log_salary'] = np.log1p(df['salary'])
+    
+    # Fast categorical one-hot encoding
+    return pd.get_dummies(df, columns=['dept'], drop_first=True)`,
+              notes: "Vectorized Pandas expressions execute in optimized C, minimizing memory overhead."
+            },
             resources: [
               { name: "freeCodeCamp Python for Data Analysis", type: "Certification", url: "https://www.freecodecamp.org/learn/data-analysis-with-python/" },
               { name: "Python Data Science Handbook", type: "Free GitHub Book", url: "https://jakevdp.github.io/PythonDataScienceHandbook/" }
@@ -2005,9 +2526,34 @@
             name: "Classical Machine Learning",
             icon: "🌲",
             timeEst: "40 hrs",
+            roles: ["ai-eng", "data-platform"],
             whyItMatters: "Before deploying heavy deep nets, Random Forests and XGBoost solve 80% of business problems at low cost.",
             description: "Supervised and unsupervised learning, decision trees, k-means, SVMs, and cross-validation.",
             prerequisites: ["ai-2"],
+            studyGuide: {
+              concept: "Decision trees recursively partition feature space based on Gini impurity or Information Gain. Gradient Boosting sequentially trains trees to correct the residual errors of preceding trees.",
+              qa: [
+                "<strong>Q: What is the Bias-Variance tradeoff?</strong><br>A: High bias underfits (too simplistic); high variance overfits (captures noise). Ensembles like Random Forests reduce variance.",
+                "<strong>Q: Why is XGBoost often superior to deep learning on tabular data?</strong><br>A: Trees handle heterogeneous feature types, unscaled data, and missing values natively with second-order Taylor approximations."
+              ],
+              pitfall: "Data leakage during preprocessing (e.g. scaling on the entire dataset before train/test splitting)."
+            },
+            codeSnippet: {
+              lang: "Python (XGBoost Classifier with Stratified K-Fold)",
+              code: `import xgboost as xgb
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import roc_auc_score
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+for train_idx, val_idx in skf.split(X, y):
+    X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
+    y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
+    
+    clf = xgb.XGBClassifier(n_estimators=300, max_depth=5, learning_rate=0.05, eval_metric='auc')
+    clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+    score = roc_auc_score(y_val, clf.predict_proba(X_val)[:, 1])`,
+              notes: "Stratified K-Fold cross-validation guarantees model generalization without test set data leakage."
+            },
             resources: [
               { name: "Stanford CS229: Machine Learning", type: "Video Lectures", url: "https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU" },
               { name: "Scikit-Learn Guide", type: "Official Docs", url: "https://scikit-learn.org/stable/user_guide.html" }
@@ -2023,9 +2569,37 @@
             name: "Deep Learning & Neural Architectures",
             icon: "🧠",
             timeEst: "50 hrs",
+            roles: ["ai-eng"],
             whyItMatters: "Deep learning powers vision, speech, and reasoning. Learning PyTorch tensor operations is fundamental.",
             description: "Backpropagation, activation functions, CNNs for vision, RNNs, and PyTorch tensors.",
             prerequisites: ["ai-3"],
+            studyGuide: {
+              concept: "Neural networks compose layers of affine transformations followed by non-linear activations (ReLU, GELU). Automatic differentiation computes gradients via reverse-mode autodiff.",
+              qa: [
+                "<strong>Q: Why is ReLU preferred over Sigmoid in deep hidden layers?</strong><br>A: ReLU derivative is 1 for positive values, preventing vanishing gradient problems during backpropagation.",
+                "<strong>Q: What is the purpose of Batch Normalization?</strong><br>A: Normalizes layer inputs to zero mean and unit variance, reducing internal covariate shift and stabilizing training."
+              ],
+              pitfall: "Forgetting to set `model.eval()` before running validation, causing Dropout and BatchNorm to behave incorrectly."
+            },
+            codeSnippet: {
+              lang: "Python / PyTorch (Production Residual Block)",
+              code: `import torch
+import torch.nn as nn
+
+class ResidualBlock(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(channels, channels, 3, padding=1, bias=False),
+            nn.BatchNorm2d(channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(channels, channels, 3, padding=1, bias=False),
+            nn.BatchNorm2d(channels)
+        )
+    def forward(self, x):
+        return x + self.conv(x) # Skip connection prevents vanishing gradients!`,
+              notes: "Skip connections allow gradients to flow directly through hundreds of layers without degradation."
+            },
             resources: [
               { name: "Fast.ai: Practical Deep Learning", type: "Hands-on Course", url: "https://course.fast.ai/" },
               { name: "MIT 6.S191: Deep Learning", type: "Lecture Videos", url: "http://introtodeeplearning.com/" }
@@ -2041,9 +2615,32 @@
             name: "NLP & Transformer Architectures",
             icon: "💬",
             timeEst: "45 hrs",
+            roles: ["ai-eng"],
             whyItMatters: "Self-attention in Transformers revolutionized AI. Knowing tokenization and attention weights is essential.",
             description: "Tokenizers, Self-Attention mechanism, Transformer encoders/decoders (BERT, GPT), and Hugging Face.",
             prerequisites: ["ai-4"],
+            studyGuide: {
+              concept: "Scaled Dot-Product Attention: Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) * V. It computes dynamic contextual relationships across every token in parallel.",
+              qa: [
+                "<strong>Q: Why divide by sqrt(d_k) in dot-product attention?</strong><br>A: As dimension d_k grows, dot products grow large, pushing softmax into regions with extremely small gradients. Dividing scales values back into stable variance.",
+                "<strong>Q: What is the difference between BERT and GPT?</strong><br>A: BERT uses bidirectional encoder attention for understanding; GPT uses causal masked decoder attention for autoregressive text generation."
+              ],
+              pitfall: "Quadratic O(N^2) memory complexity with respect to context window sequence length."
+            },
+            codeSnippet: {
+              lang: "Python / PyTorch (Scaled Dot-Product Attention)",
+              code: `import torch
+import math
+
+def scaled_dot_product_attention(Q, K, V, mask=None):
+    d_k = Q.size(-1)
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, -1e9)
+    weights = torch.softmax(scores, dim=-1)
+    return torch.matmul(weights, V), weights`,
+              notes: "The attention mechanism computes dynamic relationships between all tokens simultaneously."
+            },
             resources: [
               { name: "Stanford CS224N: NLP with Deep Learning", type: "Course Material", url: "https://web.stanford.edu/class/cs224n/" },
               { name: "Hugging Face NLP Course", type: "Interactive Labs", url: "https://huggingface.co/learn/nlp-course" }
@@ -2059,9 +2656,32 @@
             name: "Computer Vision & Generative AI",
             icon: "👁️",
             timeEst: "40 hrs",
+            roles: ["ai-eng"],
             whyItMatters: "Vision AI drives medical scanning and autonomous navigation. Master object detection and latent diffusion.",
             description: "Feature pyramids, YOLO real-time detection, image segmentation, and Diffusion models.",
             prerequisites: ["ai-4"],
+            studyGuide: {
+              concept: "Diffusion models learn the reverse process of adding Gaussian noise to an image. Real-time vision models (YOLO) frame object bounding boxes and classifications as a single regression problem.",
+              qa: [
+                "<strong>Q: What is Non-Maximum Suppression (NMS) in object detection?</strong><br>A: An algorithm that removes overlapping redundant bounding boxes, keeping only the highest confidence prediction.",
+                "<strong>Q: Why are diffusion models trained in latent space (Stable Diffusion)?</strong><br>A: Operating in latent space compresses image dimensionality 8x-16x, drastically speeding up inference compared to pixel-space diffusion."
+              ],
+              pitfall: "Evaluating object detectors with accuracy instead of Mean Average Precision (mAP) at specific IoU thresholds."
+            },
+            codeSnippet: {
+              lang: "Python / Ultralytics (Production YOLO Inference)",
+              code: `from ultralytics import YOLO
+
+# Load lightweight model for edge deployment
+model = YOLO("yolov8n.pt")
+
+# Stream inference over video frame
+results = model.predict(source="webcam", stream=True, conf=0.5)
+for r in results:
+    boxes = r.boxes.xyxy.cpu().numpy() # [x1, y1, x2, y2]
+    classes = r.boxes.cls.cpu().numpy()`,
+              notes: "YOLOv8 runs at 60+ FPS on edge hardware for real-time robotic and security applications."
+            },
             resources: [
               { name: "Stanford CS231N: Vision Deep Learning", type: "Course Material", url: "https://cs231n.github.io/" },
               { name: "OpenCV Python Complete Hub", type: "Tutorial Series", url: "https://opencv.org/university/free-opencv-course/" }
@@ -2077,9 +2697,29 @@
             name: "Reinforcement Learning & Agents",
             icon: "🕹️",
             timeEst: "45 hrs",
+            roles: ["ai-eng"],
             whyItMatters: "RL trains systems to make sequences of decisions under uncertainty, powering robotics and RLHF for LLMs.",
             description: "Markov Decision Processes, Q-Learning, DQN, Policy Gradients (PPO), and reward engineering.",
             prerequisites: ["ai-4"],
+            studyGuide: {
+              concept: "Agents maximize expected cumulative discounted rewards by balancing exploration (trying new actions) with exploitation (using known best actions).",
+              qa: [
+                "<strong>Q: What is the Bellman Equation?</strong><br>A: Decomposes the value function into immediate reward plus discounted future value: V(s) = R(s) + gamma * sum(P(s'|s,a) * V(s')).",
+                "<strong>Q: Why does Proximal Policy Optimization (PPO) clip policy updates?</strong><br>A: Clipping prevents dangerously large policy updates that destroy learned behaviors in continuous action spaces."
+              ],
+              pitfall: "Reward hacking: when an agent exploits unforeseen shortcuts in the reward function without solving the intended task."
+            },
+            codeSnippet: {
+              lang: "Python (Bellman Q-Learning Update)",
+              code: `def update_q_value(q_table, state, action, reward, next_state, alpha=0.1, gamma=0.99):
+    # Current estimate
+    old_val = q_table[state, action]
+    # Maximum predicted future reward
+    next_max = np.max(q_table[next_state])
+    # Bellman update formula
+    q_table[state, action] = old_val + alpha * (reward + gamma * next_max - old_val)`,
+              notes: "Q-learning is model-free and converges to the optimal action-selection policy for any finite MDP."
+            },
             resources: [
               { name: "Deep RL Course (Hugging Face)", type: "Certification", url: "https://huggingface.co/deep-rl-course" },
               { name: "Spinning Up in Deep RL (OpenAI)", type: "Code Framework", url: "https://spinningup.openai.com/" }
@@ -2095,9 +2735,34 @@
             name: "MLOps & Model Deployment",
             icon: "🚢",
             timeEst: "45 hrs",
+            roles: ["ai-eng", "data-platform"],
             whyItMatters: "A model in a notebook creates zero value. Production ML requires Docker containers, drift tracking, and low-latency APIs.",
             description: "FastAPI inference, Docker containers, MLflow experiment tracking, and CI/CD pipelines.",
             prerequisites: ["ai-5"],
+            studyGuide: {
+              concept: "Production ML maintains reproducible training pipelines, tracks data and model artifact lineage, and monitors inference distributions for data drift.",
+              qa: [
+                "<strong>Q: What is concept drift vs data drift?</strong><br>A: Data drift occurs when input features P(X) change; concept drift occurs when the relationship between features and labels P(Y|X) changes.",
+                "<strong>Q: Why use Triton or TorchScript instead of raw Python FastAPI?</strong><br>A: TorchScript and TensorRT compile models into C++ runtime graphs with GPU dynamic batching, cutting p99 latency in half."
+              ],
+              pitfall: "Training-serving skew where feature transforms during batch training differ from streaming real-time transforms."
+            },
+            codeSnippet: {
+              lang: "Python / FastAPI (Asynchronous Model Serving)",
+              code: `from fastapi import FastAPI
+import torch
+
+app = FastAPI()
+model = torch.jit.load("model_traced.pt").eval().cuda()
+
+@app.post("/predict")
+async def predict(payload: list[float]):
+    with torch.no_grad():
+        tensor_in = torch.tensor([payload], device="cuda")
+        out = model(tensor_in).cpu().numpy().tolist()
+    return {"prediction": out[0]}`,
+              notes: "TorchScript JIT compiles PyTorch graphs into standalone C++ binaries independent of the Python GIL."
+            },
             resources: [
               { name: "Made With ML (Production MLOps)", type: "Full Course", url: "https://madewithml.com/" },
               { name: "Full Stack Deep Learning", type: "Video Series", url: "https://fullstackdeeplearning.com/" }
@@ -2113,9 +2778,35 @@
             name: "LLM Fine-Tuning & Production RAG",
             icon: "✨",
             timeEst: "50 hrs",
+            roles: ["ai-eng"],
             whyItMatters: "Enterprise AI relies on grounding foundation models with proprietary data via RAG and LoRA fine-tuning.",
             description: "LoRA parameter-efficient tuning, vector databases (Chroma, Milvus), chunking, and LangChain.",
-            prerequisites: ["ai-5", "ai-8"],
+            studyGuide: {
+              concept: "Low-Rank Adaptation (LoRA) freezes pretrained weights and injects trainable rank-decomposition matrices (A * B), reducing trainable parameters by 99% without accuracy loss.",
+              qa: [
+                "<strong>Q: When should you use RAG vs Fine-Tuning?</strong><br>A: Use RAG for dynamic private knowledge, real-time data, and verifiable citations. Use Fine-Tuning for teaching tone, specialized formatting, or domain jargon.",
+                "<strong>Q: What is hybrid search in vector databases?</strong><br>A: Combining sparse keyword BM25 retrieval with dense vector embedding retrieval using Reciprocal Rank Fusion (RRF)."
+              ],
+              pitfall: "Poor chunking strategy that splits sentences across paragraphs, severing key contextual dependencies."
+            },
+            codeSnippet: {
+              lang: "Python (LoRA PEFT Configuration & Pipeline)",
+              code: `from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM
+
+model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3-8B")
+lora_config = LoraConfig(
+    r=16,                          # Low rank dimension
+    lora_alpha=32,                 # Scaling factor
+    target_modules=["q_proj", "v_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+peft_model = get_peft_model(model, lora_config)
+peft_model.print_trainable_parameters() # Only ~0.1% of parameters trained!`,
+              notes: "LoRA trains multi-billion parameter foundation models on a single consumer GPU."
+            },
             resources: [
               { name: "DeepLearning.AI: RAG Short Courses", type: "Interactive Lessons", url: "https://www.deeplearning.ai/short-courses/" },
               { name: "Pinecone Vector Learning Hub", type: "Tutorials", url: "https://www.pinecone.io/learn/" }
@@ -2139,9 +2830,30 @@
             name: "Applied Statistics & Probability",
             icon: "🎲",
             timeEst: "40 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Hypothesis testing and probability prevent drawing flawed business conclusions from random noise.",
             description: "Central Limit Theorem, confidence intervals, p-values, hypothesis tests, and Bayes' theorem.",
             prerequisites: [],
+            studyGuide: {
+              concept: "The Central Limit Theorem states that the sample mean distribution approaches a normal distribution as sample size grows, regardless of population shape.",
+              qa: [
+                "<strong>Q: What is a p-value?</strong><br>A: The probability of obtaining test results at least as extreme as observed, assuming the null hypothesis is true. It is NOT the probability that the hypothesis is false.",
+                "<strong>Q: What is Type I vs Type II error?</strong><br>A: Type I is a false positive (rejecting true null); Type II is a false negative (failing to reject false null)."
+              ],
+              pitfall: "P-hacking: running multiple hypothesis tests until finding p < 0.05 without Bonferroni correction."
+            },
+            codeSnippet: {
+              lang: "Python / SciPy (Two-Sample Welch's T-Test)",
+              code: `from scipy import stats
+
+control_conversions = [1, 0, 1, 1, 0, 1, 0, 0, 1, 0]
+test_conversions = [1, 1, 1, 1, 0, 1, 1, 0, 1, 1]
+
+t_stat, p_val = stats.ttest_ind(control_conversions, test_conversions, equal_var=False)
+if p_val < 0.05:
+    print(f"Statistically significant lift (p={p_val:.4f})")`,
+              notes: "Welch's t-test does not assume equal variances between experimental cohorts."
+            },
             resources: [
               { name: "Khan Academy: Statistics", type: "Interactive Practice", url: "https://www.khanacademy.org/math/statistics-probability" },
               { name: "StatQuest with Josh Starmer", type: "Intuitive Videos", url: "https://www.youtube.com/@statquest" }
@@ -2157,9 +2869,36 @@
             name: "Data Wrangling & Cleaning",
             icon: "🧹",
             timeEst: "35 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Real data is corrupt and messy. 80% of data work is converting raw tables into clean representations.",
             description: "Missing value imputation, date/time normalization, regex extraction, and anomaly filtering.",
             prerequisites: ["ds-1"],
+            studyGuide: {
+              concept: "Dirty data cascades down to corrupt models. Cleaning requires handling missingness (MCAR, MAR, MNAR), standardizing temporal records, and capping outlier extremes.",
+              qa: [
+                "<strong>Q: When is median imputation better than mean imputation?</strong><br>A: When the data contains extreme outliers or high skewness, since the median is a robust metric unaffected by extremes.",
+                "<strong>Q: How do you handle Missing Not At Random (MNAR)?</strong><br>A: You must model the missingness mechanism directly by creating explicit missing indicator boolean columns."
+              ],
+              pitfall: "Dropping missing rows blindly, causing severe sample selection bias."
+            },
+            codeSnippet: {
+              lang: "Python / Polars (Blazing-Fast Rust-Backed Data Wrangling)",
+              code: `import polars as pl
+
+# Polars processes millions of rows at multi-threaded C/Rust speed
+df = pl.scan_csv("massive_telecom_data.csv")
+query = (
+    df.filter(pl.col("user_id").is_not_null())
+      .with_columns(
+          pl.col("timestamp").str.to_datetime(),
+          pl.col("call_duration").fill_null(strategy="median")
+      )
+      .group_by("region")
+      .agg(pl.col("call_duration").mean().alias("avg_duration"))
+)
+result = query.collect()`,
+              notes: "Polars uses Apache Arrow memory buffers with parallel Rust execution, running up to 20x faster than Pandas."
+            },
             resources: [
               { name: "Kaggle Data Cleaning Micro-Course", type: "Code Notebooks", url: "https://www.kaggle.com/learn/data-cleaning" },
               { name: "Pandas Cookbook", type: "Recipes Guide", url: "https://pandas.pydata.org/docs/user_guide/cookbook.html" }
@@ -2175,9 +2914,37 @@
             name: "Relational Modeling & Advanced SQL",
             icon: "💾",
             timeEst: "35 hrs",
+            roles: ["data-platform"],
             whyItMatters: "SQL is the universal language of business data. Window functions and query plans are mandatory skills.",
             description: "Complex joins, CTEs, window functions (ROW_NUMBER, LAG, LEAD), and query optimization.",
             prerequisites: ["ds-2"],
+            studyGuide: {
+              concept: "Relational modeling organizes facts and dimensions (Star Schema). Window functions compute metrics across row frames without collapsing rows into a single aggregation.",
+              qa: [
+                "<strong>Q: What is the difference between RANK() and DENSE_RANK()?</strong><br>A: RANK() skips positions on ties (1, 2, 2, 4); DENSE_RANK() does not skip positions (1, 2, 2, 3).",
+                "<strong>Q: Why are CTEs preferred over deeply nested subqueries?</strong><br>A: Common Table Expressions (WITH clauses) improve modularity, legibility, and optimizer evaluation."
+              ],
+              pitfall: "Cartesian product explosion from unintended many-to-many joins on non-unique keys."
+            },
+            codeSnippet: {
+              lang: "SQL (Cohort Retention Analytics)",
+              code: `WITH user_first_month AS (
+    SELECT user_id, DATE_TRUNC('month', MIN(signup_date)) as cohort_month
+    FROM signups GROUP BY user_id
+),
+activity AS (
+    SELECT a.user_id, DATE_TRUNC('month', a.event_date) as active_month
+    FROM events a GROUP BY a.user_id, DATE_TRUNC('month', a.event_date)
+)
+SELECT 
+    c.cohort_month,
+    EXTRACT(MONTH FROM AGE(a.active_month, c.cohort_month)) as month_number,
+    COUNT(DISTINCT a.user_id) as active_users
+FROM user_first_month c
+JOIN activity a ON c.user_id = a.user_id
+GROUP BY 1, 2 ORDER BY 1, 2;`,
+              notes: "Cohort analysis in SQL directly tracks customer lifetime retention month-over-month."
+            },
             resources: [
               { name: "Mode Analytics SQL Tutorial", type: "Interactive Platform", url: "https://mode.com/sql-tutorial/" },
               { name: "SQLBolt: Interactive SQL", type: "Browser Practice", url: "https://sqlbolt.com/" }
@@ -2193,9 +2960,31 @@
             name: "Predictive Statistical Modeling",
             icon: "📈",
             timeEst: "45 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Moving from descriptive reporting to predictive forecasting unlocks massive operational leverage.",
             description: "Ridge & Lasso regression, logistic regression, time-series forecasting (ARIMA), and survival analysis.",
             prerequisites: ["ds-2", "ds-3"],
+            studyGuide: {
+              concept: "Regularization constrains model weights to avoid overfitting. L1 (Lasso) drives uninformative weights to zero for feature selection; L2 (Ridge) shrinks weights smoothly.",
+              qa: [
+                "<strong>Q: What is stationarity in time-series?</strong><br>A: A series whose mean, variance, and autocorrelation remain constant over time, enabling reliable ARIMA predictions.",
+                "<strong>Q: What is the logit function in logistic regression?</strong><br>A: The natural logarithm of the odds: log(p / (1 - p)), which maps probability (0 to 1) to an unbounded real space (-inf to +inf)."
+              ],
+              pitfall: "Evaluating time-series forecasting models with random K-Fold cross-validation instead of temporal forward chaining."
+            },
+            codeSnippet: {
+              lang: "Python (LassoCV Feature Selection Pipeline)",
+              code: `from sklearn.linear_model import LassoCV
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 5-fold cross-validated penalty tuning
+lasso = LassoCV(cv=5, random_state=42).fit(X_scaled, y)
+selected_features = [col for col, coef in zip(X.columns, lasso.coef_) if coef != 0]`,
+              notes: "Lasso L1 penalty drives useless coefficients to exactly zero, performing automated feature selection."
+            },
             resources: [
               { name: "Introduction to Statistical Learning (ISLR)", type: "Free Textbook", url: "https://www.statlearning.com/" },
               { name: "Kaggle Time Series Course", type: "Interactive Labs", url: "https://www.kaggle.com/learn/time-series" }
@@ -2211,9 +3000,35 @@
             name: "Big Data Processing with Spark",
             icon: "⚡",
             timeEst: "45 hrs",
+            roles: ["data-platform"],
             whyItMatters: "When datasets exceed single-machine RAM, distributed processing engines like Apache Spark are vital.",
             description: "PySpark DataFrames, lazy execution, partition tuning, and distributed joins.",
             prerequisites: ["ds-3"],
+            studyGuide: {
+              concept: "Spark distributes data as partitions across worker nodes. It uses lazy DAG execution to optimize query plans before triggering actions.",
+              qa: [
+                "<strong>Q: What is a shuffle in Spark?</strong><br>A: Redistributing data across cluster nodes when an operation (like groupByKey or join) requires data with the same key to reside on the same executor. Highly expensive in network I/O.",
+                "<strong>Q: Why use Broadcast joins?</strong><br>A: If one table is small, broadcasting it to all executors avoids shuffling the massive table."
+              ],
+              pitfall: "Data skew where one partition is 10x larger than others, causing a single straggler task to block the entire cluster."
+            },
+            codeSnippet: {
+              lang: "Python / PySpark (Distributed Broadcast Join)",
+              code: `from pyspark.sql import SparkSession
+from pyspark.sql.functions import broadcast
+
+spark = SparkSession.builder.appName("FlightAnalytics").getOrCreate()
+
+large_flights_df = spark.read.parquet("s3://airline-data/flights/*.parquet")
+small_airports_df = spark.read.csv("s3://airline-data/airports.csv", header=True)
+
+# Broadcast join avoids expensive cluster network shuffle
+joined_df = large_flights_df.join(
+    broadcast(small_airports_df),
+    large_flights_df.dest == small_airports_df.iata_code
+)`,
+              notes: "Broadcast joins eliminate cluster-wide network shuffles for small dimensional tables."
+            },
             resources: [
               { name: "Spark: The Definitive Guide Repo", type: "Code Labs", url: "https://github.com/databricks/Spark-The-Definitive-Guide" },
               { name: "Databricks Community Edition", type: "Free Spark Cloud", url: "https://community.cloud.databricks.com/" }
@@ -2229,9 +3044,34 @@
             name: "Data Storytelling & Dashboards",
             icon: "🎨",
             timeEst: "35 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Data without clear executive communication will be ignored. Visual hierarchy turns insights into decisions.",
             description: "Visual design principles, Streamlit/Plotly dashboard development, and executive summaries.",
             prerequisites: ["ds-2"],
+            studyGuide: {
+              concept: "Visual design uses preattentive attributes (color, size, position) to direct cognitive focus toward actionable anomalies rather than decorative charts.",
+              qa: [
+                "<strong>Q: Why avoid pie charts with more than 3 categories?</strong><br>A: Human eyes are notoriously bad at comparing angles and area slices; bar charts compare linear lengths with far higher precision.",
+                "<strong>Q: What is the concept of 'Data-to-Ink ratio'?</strong><br>A: Edward Tufte's principle that non-informative visual ink (gridlines, 3D shadows, backgrounds) should be minimized."
+              ],
+              pitfall: "Using dual Y-axes with different scales, misleading viewers into false correlation assumptions."
+            },
+            codeSnippet: {
+              lang: "Python / Streamlit (Interactive Executive Dashboard)",
+              code: `import streamlit as st
+import plotly.express as px
+
+st.set_page_config(layout="wide")
+st.title("Executive Revenue & Churn Intelligence")
+
+col1, col2 = st.columns(2)
+with col1:
+    fig = px.line(df, x="date", y="mrr", title="Monthly Recurring Revenue ($)")
+    st.plotly_chart(fig, use_container_width=True)
+with col2:
+    st.metric("Net Retention Rate", "118%", "+3.2% MoM")`,
+              notes: "Streamlit creates reactive, responsive analytical applications entirely in pure Python."
+            },
             resources: [
               { name: "Storytelling with Data", type: "Design Guidelines", url: "https://www.storytellingwithdata.com/" },
               { name: "Streamlit Docs Hub", type: "Framework Docs", url: "https://docs.streamlit.io/" }
@@ -2247,9 +3087,37 @@
             name: "Real-Time Streaming Analytics",
             icon: "🌊",
             timeEst: "45 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Fintech and logistics cannot wait for nightly batch runs; sensor streams must be processed in sub-second windows.",
             description: "Apache Kafka message buses, sliding windows, watermarks, and stateful streams.",
             prerequisites: ["ds-5"],
+            studyGuide: {
+              concept: "Stream processing manages infinite event streams using windowing (tumbling, sliding, session) and handles out-of-order data using event-time watermarks.",
+              qa: [
+                "<strong>Q: What is event time vs processing time?</strong><br>A: Event time is when the event occurred on the device; processing time is when the stream engine server ingests it.",
+                "<strong>Q: How do watermarks handle late-arriving events?</strong><br>A: A watermark of 'T - 10s' declares that the engine will not expect any future events with timestamp earlier than T - 10s, allowing window closure."
+              ],
+              pitfall: "Accumulating unbounded state in stream memory without configured state time-to-live (TTL)."
+            },
+            codeSnippet: {
+              lang: "Python / Kafka (Real-Time Event Stream Consumer)",
+              code: `from kafka import KafkaConsumer
+import json
+
+consumer = KafkaConsumer(
+    'financial_transactions',
+    bootstrap_servers=['localhost:9092'],
+    auto_offset_reset='latest',
+    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+)
+
+for msg in consumer:
+    tx = msg.value
+    if tx['amount'] > 10000:
+        # Trigger real-time fraud alert pipeline
+        trigger_fraud_check(tx)`,
+              notes: "Kafka partitions scale horizontally to handle millions of streaming messages per second."
+            },
             resources: [
               { name: "Confluent Kafka Developer Course", type: "Free Training", url: "https://developer.confluent.io/courses/" },
               { name: "Apache Flink Docs", type: "Stream Framework", url: "https://nightlies.apache.org/flink/flink-docs-stable/" }
@@ -2265,9 +3133,30 @@
             name: "Causal Inference & Experimentation",
             icon: "🔬",
             timeEst: "40 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Correlation is not causation. Causal graphs, propensity scores, and synthetic controls measure true impact.",
             description: "Directed Acyclic Graphs (DAGs), propensity score matching, and difference-in-differences.",
             prerequisites: ["ds-4"],
+            studyGuide: {
+              concept: "Confounders influence both the treatment and the outcome. Adjusting for confounders with DAGs blocks backdoor paths to calculate true Average Treatment Effect (ATE).",
+              qa: [
+                "<strong>Q: What is Simpson's Paradox?</strong><br>A: When a trend appears in several different groups of data but reverses when these groups are combined, caused by lurking confounding variables.",
+                "<strong>Q: What is Difference-in-Differences (DiD)?</strong><br>A: Compares the change in outcomes over time between a treated group and an untreated control group to eliminate time-invariant bias."
+              ],
+              pitfall: "Conditioning on a collider variable, which paradoxically opens a spurious correlation path between independent variables."
+            },
+            codeSnippet: {
+              lang: "Python / CausalML (Propensity Score Matching)",
+              code: `import statsmodels.api as sm
+
+# Estimate propensity score via logistic regression
+X_confounders = df[['user_age', 'past_spend', 'tenure']]
+treatment = df['received_discount']
+
+logit = sm.Logit(treatment, sm.add_constant(X_confounders)).fit()
+df['propensity_score'] = logit.predict()`,
+              notes: "Propensity matching balances treated and control groups to simulate a randomized controlled trial."
+            },
             resources: [
               { name: "Causal Inference for the Brave and True", type: "Online Book", url: "https://matheusfacure.github.io/python-causality-handbook/" },
               { name: "Harvard Causal Inference Course", type: "Syllabus", url: "https://www.hsph.harvard.edu/causal/" }
@@ -2283,9 +3172,35 @@
             name: "Data Governance & Lineage with dbt",
             icon: "🏛️",
             timeEst: "40 hrs",
+            roles: ["data-platform"],
             whyItMatters: "Enterprise data requires privacy compliance (GDPR), reproducible pipelines, and automated testing.",
             description: "Data build tool (dbt), schema testing, data catalogs, and lineage tracking.",
             prerequisites: ["ds-7"],
+            studyGuide: {
+              concept: "Modern analytics engineering applies software engineering best practices (version control, automated tests, modular DAG models) to data transformation inside modern warehouses (Snowflake, BigQuery).",
+              qa: [
+                "<strong>Q: What is the benefit of dbt's ref() function?</strong><br>A: Automatically resolves dependencies between models to build the execution DAG and handles table vs view materialization.",
+                "<strong>Q: What are dbt schema tests?</strong><br>A: Assertions (unique, not_null, accepted_values, relationships) evaluated on tables in CI pipelines before deployment."
+              ],
+              pitfall: "Building brittle pipeline transformations without automated data contract tests."
+            },
+            codeSnippet: {
+              lang: "SQL / Jinja (dbt Core Incremental Model)",
+              code: `{{ config(materialized='incremental', unique_key='transaction_id') }}
+
+SELECT
+    transaction_id,
+    user_id,
+    amount,
+    created_at
+FROM {{ source('raw_store', 'transactions') }}
+
+{% if is_incremental() %}
+  -- Only process new records since latest run
+  WHERE created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}`,
+              notes: "Incremental models process only new delta records, cutting cloud warehouse compute costs by 90%."
+            },
             resources: [
               { name: "dbt Learn Free Tutorials", type: "Modern Stack", url: "https://courses.getdbt.com/" },
               { name: "Great Expectations Docs", type: "Testing Framework", url: "https://docs.greatexpectations.io/" }
@@ -2309,9 +3224,30 @@
             name: "Networking & Packet Inspection",
             icon: "🔌",
             timeEst: "40 hrs",
+            roles: ["red-team"],
             whyItMatters: "Attackers traverse network boundaries. Inspecting raw Wireshark packet captures reveals hidden exploits.",
             description: "TCP handshakes, subnetting, ARP spoofing, ICMP anomalies, and Wireshark filters.",
             prerequisites: [],
+            studyGuide: {
+              concept: "All network defense begins with packet inspection. Detecting anomalous TCP flags (SYN scan, FIN scan, NULL scan) uncovers unauthorized reconnaissance.",
+              qa: [
+                "<strong>Q: How does an ARP spoofing attack work?</strong><br>A: An attacker broadcasts forged ARP replies associating their MAC address with the default gateway IP, intercepting all local subnet traffic.",
+                "<strong>Q: What is the purpose of a TCP SYN scan?</strong><br>A: A 'stealth scan' that sends SYN packets and examines replies (SYN-ACK means open; RST means closed) without completing the 3-way handshake."
+              ],
+              pitfall: "Failing to encrypt management protocols, leaving passwords visible in plain text on unsegmented networks."
+            },
+            codeSnippet: {
+              lang: "Python / Scapy (Automated Network Sniffer)",
+              code: `from scapy.all import sniff, TCP, IP
+
+def packet_callback(pkt):
+    if pkt.haslayer(TCP) and pkt[TCP].flags == "S":
+        print(f"[!] SYN Packet Detected: {pkt[IP].src} -> {pkt[IP].dst}:{pkt[TCP].dport}")
+
+# Sniff live network traffic
+sniff(filter="tcp", prn=packet_callback, store=0)`,
+              notes: "Scapy provides packet creation, manipulation, and live decoding in pure Python."
+            },
             resources: [
               { name: "Professor Messer's Network+", type: "Video Course", url: "https://www.professormesser.com/network-plus/n10-008/n10-008-video/n10-008-training-course/" },
               { name: "TryHackMe: Network Fundamentals", type: "Interactive Rooms", url: "https://tryhackme.com/module/network-fundamentals" }
@@ -2327,9 +3263,31 @@
             name: "Linux Security & Bash Automation",
             icon: "🐧",
             timeEst: "35 hrs",
+            roles: ["systems", "red-team"],
             whyItMatters: "90% of cloud servers run Linux. Mastering file permissions, sudoer configs, and Bash automation is non-negotiable.",
             description: "Linux permissions, SUID binaries, systemd logging, cron, and SSH hardening.",
             prerequisites: ["sec-1"],
+            studyGuide: {
+              concept: "Linux security enforces discretionary access controls (rwx) across Owner, Group, and Others. SUID/SGID bits execute binaries with elevated owner permissions.",
+              qa: [
+                "<strong>Q: Why are SUID binaries dangerous?</strong><br>A: If an executable with root SUID permissions has a command injection or path traversal flaw, low-privilege users can escalate to root.",
+                "<strong>Q: What is the effect of chmod 700 on a sensitive file?</strong><br>A: Only the owner has read, write, and execute permissions; all group and other access is completely denied."
+              ],
+              pitfall: "Granting wildcards in `/etc/sudoers` (e.g. `ALL=(ALL) NOPASSWD: /usr/bin/python`) allowing trivial root privilege escalation."
+            },
+            codeSnippet: {
+              lang: "Bash (Automated Security Audit & SUID Scanner)",
+              code: `#!/bin/bash
+echo "[*] Scanning for Dangerous SUID Executables..."
+find / -perm -4000 -type f 2>/dev/null
+
+echo "[*] Checking World-Writable Files in /etc..."
+find /etc -maxdepth 2 -perm -o+w 2>/dev/null
+
+echo "[*] Checking Active Open Listening Ports..."
+ss -tuln`,
+              notes: "Auditing SUID bits and world-writable directories flags common misconfigurations during security reviews."
+            },
             resources: [
               { name: "OverTheWire: Bandit Wargame", type: "Gamified Hacking", url: "https://overthewire.org/wargames/bandit/" },
               { name: "Linux Journey", type: "Interactive Guide", url: "https://linuxjourney.com/" }
@@ -2345,9 +3303,31 @@
             name: "Applied Cryptography Principles",
             icon: "🔐",
             timeEst: "40 hrs",
+            roles: ["systems", "red-team"],
             whyItMatters: "Cryptography protects privacy and data integrity. Understanding symmetric vs asymmetric ciphers prevents leaks.",
             description: "AES-256, RSA, Elliptic Curve Cryptography (ECC), SHA-256 hashing, and digital certificates.",
             prerequisites: ["sec-1"],
+            studyGuide: {
+              concept: "Symmetric ciphers (AES) use one shared secret for bulk speed; asymmetric ciphers (RSA, ECC) use public/private keypairs for authentication and key exchange.",
+              qa: [
+                "<strong>Q: Why is ECB mode dangerous in AES encryption?</strong><br>A: Electronic Codebook mode encrypts identical plaintext blocks into identical ciphertext blocks, preserving visual and structural patterns.",
+                "<strong>Q: What is the difference between encryption and hashing?</strong><br>A: Encryption is two-way (reversible with a key); hashing is one-way (irreversible mathematical digest)."
+              ],
+              pitfall: "Rolling your own crypto algorithm instead of using vetted libraries like libsodium or OpenSSL."
+            },
+            codeSnippet: {
+              lang: "Rust / C (AES-256-GCM Authenticated Encryption)",
+              code: `use aes_gcm::{Aes256Gcm, Key, Nonce, aead::{Aead, KeyInit}};
+
+fn encrypt_payload(key_bytes: &[u8; 32], nonce_bytes: &[u8; 12], data: &[u8]) -> Vec<u8> {
+    let key = Key::<Aes256Gcm>::from_slice(key_bytes);
+    let cipher = Aes256Gcm::new(key);
+    let nonce = Nonce::from_slice(nonce_bytes);
+    // Authenticated encryption guarantees both confidentiality AND integrity!
+    cipher.encrypt(nonce, data).expect("encryption failure")
+}`,
+              notes: "AES-GCM incorporates an authentication tag, preventing tampering and padding oracle attacks."
+            },
             resources: [
               { name: "CryptoHack: Modern Cryptography", type: "Hands-on Puzzles", url: "https://cryptohack.org/" },
               { name: "Coursera: Cryptography I (Stanford)", type: "Free Audit", url: "https://www.coursera.org/learn/crypto" }
@@ -2363,9 +3343,30 @@
             name: "Web Security & OWASP Top 10",
             icon: "🕸️",
             timeEst: "45 hrs",
+            roles: ["red-team"],
             whyItMatters: "Web vulnerabilities expose user data daily. Learning SQLi, XSS, and CSRF allows you to write secure software.",
             description: "OWASP Top 10, SQL injection, XSS, CSRF tokens, SSRF, and Burp Suite proxy usage.",
             prerequisites: ["sec-2", "sec-3"],
+            studyGuide: {
+              concept: "Never trust user input. Unsanitized input concatenated into SQL, HTML, or shell commands breaks out of data context into execution context.",
+              qa: [
+                "<strong>Q: How do Parameterized Queries stop SQL Injection?</strong><br>A: The database treats parameterized values strictly as data literals, never compiling user input into executable SQL syntax.",
+                "<strong>Q: What is the difference between Stored XSS and Reflected XSS?</strong><br>A: Stored XSS is permanently saved in the database (affecting all visitors); Reflected XSS is reflected immediately off a malicious link URL."
+              ],
+              pitfall: "Relying purely on client-side frontend validation which attackers bypass directly in Burp Suite."
+            },
+            codeSnippet: {
+              lang: "Go / SQL (Secure Parameterized Query Defense)",
+              code: `// Secure parameterization prevents SQL Injection 100%
+func GetUser(db *sql.DB, username string) (*User, error) {
+    var u User
+    // Safe: Query parameters are sent out-of-band to the database engine
+    query := "SELECT id, username, email FROM users WHERE username = $1"
+    err := db.QueryRow(query, username).Scan(&u.ID, &u.Username, &u.Email)
+    return &u, err
+}`,
+              notes: "Parameterized queries separate SQL instructions from user data at the database driver level."
+            },
             resources: [
               { name: "PortSwigger Web Security Academy", type: "Free World-Class Labs", url: "https://portswigger.net/web-security" },
               { name: "OWASP Top 10 Official Docs", type: "Standards", url: "https://owasp.org/www-project-top-ten/" }
@@ -2381,9 +3382,26 @@
             name: "Penetration Testing & Exploitation",
             icon: "🎯",
             timeEst: "45 hrs",
+            roles: ["red-team"],
             whyItMatters: "Offensive security testing discovers privilege escalation flaws before malicious actors do.",
             description: "Reconnaissance (Nmap), Metasploit, Linux privilege escalation, and Hashcat password cracking.",
             prerequisites: ["sec-4"],
+            studyGuide: {
+              concept: "Penetration testing follows an authorized methodology: Reconnaissance -> Port Scanning -> Vulnerability Assessment -> Exploitation -> Post-Exploitation -> Remediation Reporting.",
+              qa: [
+                "<strong>Q: What is the difference between active and passive reconnaissance?</strong><br>A: Passive uses OSINT (Shodan, WHOIS) without sending packets to the target; active directly probes the target's IP ports.",
+                "<strong>Q: What is an unquoted service path vulnerability in Windows?</strong><br>A: If a service path with spaces is unquoted (e.g. `C:\\Program Files\\app.exe`), Windows attempts to execute `C:\\Program.exe` first."
+              ],
+              pitfall: "Testing targets without explicit written authorization (Rules of Engagement), which is illegal."
+            },
+            codeSnippet: {
+              lang: "Bash (Automated Port Scanning & Service Fingerprint)",
+              code: `#!/bin/bash
+TARGET=$1
+echo "[*] Running Stealth SYN Service Scan on $TARGET..."
+nmap -sS -sV -sC -T4 -p- -oN scan_results.txt $TARGET`,
+              notes: "Automated Nmap scanning probes open ports and fingerprints running service versions."
+            },
             resources: [
               { name: "Hack The Box Academy", type: "Interactive Training", url: "https://academy.hackthebox.com/" },
               { name: "TCM Security: Ethical Hacking Guides", type: "Syllabus", url: "https://tcm-sec.com/" }
@@ -2399,9 +3417,37 @@
             name: "Defensive Security & SOC Operations",
             icon: "🛡️",
             timeEst: "45 hrs",
+            roles: ["red-team"],
             whyItMatters: "Offense gets headlines, but defense saves organizations. Analyzing SIEM event logs stops breaches in progress.",
             description: "SIEM platforms, Splunk/Elastic, Sigma detection rules, endpoint detection, and incident response.",
             prerequisites: ["sec-2", "sec-3"],
+            studyGuide: {
+              concept: "Defenders use the MITRE ATT&CK framework to map adversary tactics and deploy detection rules across host telemetry (Sysmon) and network sensors.",
+              qa: [
+                "<strong>Q: What are Windows Event IDs 4624 and 4625?</strong><br>A: 4624 is an account successfully logged on; 4625 is an account logon failure (vital for detecting brute-force attacks).",
+                "<strong>Q: What is the purpose of an EDR (Endpoint Detection and Response) agent?</strong><br>A: Hooks into the OS kernel to record process execution trees, memory injections, and lateral network connections in real time."
+              ],
+              pitfall: "Alert fatigue: configuring SIEM thresholds so loosely that analysts ignore critical security alerts."
+            },
+            codeSnippet: {
+              lang: "YAML (Sigma Detection Rule for Suspicious PowerShell)",
+              code: `title: Encoded PowerShell Command Execution
+id: 54a7c182-1234-4567-8901-abcdef123456
+status: production
+description: Detects encoded base64 PowerShell used to evade defense
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\\powershell.exe'
+        CommandLine|contains:
+            - ' -enc '
+            - ' -encodedcommand '
+    condition: selection
+level: high`,
+              notes: "Sigma detection rules are vendor-agnostic and convert directly into Splunk, Elastic, or Sentinel queries."
+            },
             resources: [
               { name: "LetsDefend: Blue Team Training", type: "Simulated SOC Cases", url: "https://letsdefend.io/" },
               { name: "Splunk Free Security Training", type: "Official Labs", url: "https://www.splunk.com/en_us/training/free-courses/splunk-fundamentals-1.html" }
@@ -2417,9 +3463,36 @@
             name: "Reverse Engineering & Malware Dissection",
             icon: "🔬",
             timeEst: "45 hrs",
+            roles: ["red-team"],
             whyItMatters: "To understand sophisticated attacks, you must decompile compiled binaries and trace assembly execution.",
             description: "Disassemblers (Ghidra), x86 assembly, dynamic sandboxes, and PE file headers.",
             prerequisites: ["sec-2", "sec-4"],
+            studyGuide: {
+              concept: "Reverse engineering reconstructs high-level logic from machine code using static analysis (Ghidra decompiler) and dynamic analysis (GDB/x64dbg breakpoints).",
+              qa: [
+                "<strong>Q: What is a packed binary in malware analysis?</strong><br>A: A binary compressed or encrypted with a packer stub (e.g. UPX) to conceal malicious payload strings from static antivirus signatures.",
+                "<strong>Q: What does the x86 instruction `test eax, eax` followed by `jz` do?</strong><br>A: Sets zero flag if EAX is 0, and jumps if zero; commonly used to check function return success."
+              ],
+              pitfall: "Executing live malware on an unisolated host rather than in an air-gapped, snapshot-revertible VM sandbox."
+            },
+            codeSnippet: {
+              lang: "C / Assembly (Ghidra Decompiled Logic Pattern)",
+              code: `// Reconstructing password validation subroutine in Ghidra
+int check_key(const char *input_key) {
+    const char *target = "SEC_KEY_2026";
+    // Check lengths match
+    if (strlen(input_key) != 12) return 0;
+    
+    // Decompiled loop matching XOR obfuscation
+    for (int i = 0; i < 12; i++) {
+        if ((input_key[i] ^ 0x5A) != (target[i] ^ 0x5A)) {
+            return 0; // Invalid
+        }
+    }
+    return 1; // Valid key!
+}`,
+              notes: "Decompilers reconstruct human-readable C syntax directly from raw binary disassembly."
+            },
             resources: [
               { name: "OpenSecurityTraining2: Arch 1001", type: "Assembly Labs", url: "https://ost2.fyi/" },
               { name: "Ghidra Official Training Material", type: "Decompiler Guide", url: "https://ghidra-sre.org/" }
@@ -2435,9 +3508,36 @@
             name: "Cloud Security & DevSecOps",
             icon: "☁️",
             timeEst: "45 hrs",
+            roles: ["systems", "red-team"],
             whyItMatters: "Misconfigured AWS IAM roles and exposed cloud storage cause the majority of modern enterprise breaches.",
             description: "AWS IAM policies, least privilege principle, Kubernetes security, and static code analysis (SAST).",
             prerequisites: ["sec-5", "sec-6"],
+            studyGuide: {
+              concept: "DevSecOps shifts security left by baking automated SAST, secret detection, and container vulnerability scanning directly into CI/CD pipelines.",
+              qa: [
+                "<strong>Q: What is the Principle of Least Privilege in IAM?</strong><br>A: Identities receive only the absolute minimum permissions required to perform their explicit function, avoiding wildcards (`Action: '*'`).",
+                "<strong>Q: What is the danger of Kubernetes privileged containers?</strong><br>A: Privileged containers bypass namespace isolation, giving processes root access to host devices and kernel capabilities."
+              ],
+              pitfall: "Committing hardcoded API keys or AWS credentials to public Git repositories."
+            },
+            codeSnippet: {
+              lang: "YAML (DevSecOps GitHub Action Pipeline)",
+              code: `name: DevSecOps CI Gate
+on: [push, pull_request]
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Scan for Leaked Secrets
+        uses: trufflesecurity/trufflehog@main
+      - name: Container Image Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'my-app:latest'
+          exit-code: '1' # Fail build on CRITICAL vulnerabilities!`,
+              notes: "Automated CI security gates stop vulnerable Docker images and leaked secrets before merge."
+            },
             resources: [
               { name: "Flaws.cloud: AWS Security Labs", type: "Hands-on Challenge", url: "http://flaws.cloud/" },
               { name: "Cloud Security Alliance (CSA)", type: "Best Practices", url: "https://cloudsecurityalliance.org/" }
@@ -2453,9 +3553,39 @@
             name: "Exploit Development & Red Teaming",
             icon: "⚔️",
             timeEst: "50 hrs",
+            roles: ["red-team"],
             whyItMatters: "Understanding buffer overflows, Return-Oriented Programming (ROP), and Active Directory lateral movement reveals true defense limits.",
             description: "Stack buffer overflows, ROP chains, ASLR/DEP bypasses, and Active Directory Kerberoasting.",
             prerequisites: ["sec-7"],
+            studyGuide: {
+              concept: "Buffer overflows overwrite the function return instruction pointer (EIP/RIP). When DEP/NX prevents stack shellcode execution, ROP chains execute gadgets already present in executable memory.",
+              qa: [
+                "<strong>Q: What is ASLR (Address Space Layout Randomization)?</strong><br>A: An OS defense that randomizes memory offsets of stack, heap, and libraries on execution, preventing attackers from predicting hardcoded addresses.",
+                "<strong>Q: What is Kerberoasting in Active Directory?</strong><br>A: Requesting Kerberos TGS service tickets for accounts with ServicePrincipalNames (SPNs) and cracking the ticket's RC4/AES hash offline."
+              ],
+              pitfall: "Assuming compiler warnings about unsafe functions (like `strcpy`, `gets`, or `sprintf`) are harmless."
+            },
+            codeSnippet: {
+              lang: "Python / Pwntools (Modern Exploit Buffer Payload)",
+              code: `from pwn import *
+
+# Target 64-bit binary
+binary = ELF("./vulnerable_server")
+p = remote("127.0.0.1", 1337)
+
+offset = 72
+pop_rdi = 0x40120b # ROP gadget: pop rdi; ret
+ret = 0x401016     # 16-byte stack alignment gadget
+
+# Construct ROP payload bypassing DEP/NX
+payload = b"A" * offset
+payload += p64(pop_rdi)
+payload += p64(binary.got['puts'])
+payload += p64(binary.plt['puts']) # Leak libc address!
+
+p.sendline(payload)`,
+              notes: "Pwntools constructs automated ROP chains for binary vulnerability exploitation."
+            },
             resources: [
               { name: "ROP Emporium: Exploitation", type: "Step-by-Step", url: "https://ropemporium.com/" },
               { name: "BloodHound Active Directory Guide", type: "Lateral Movement Tooling", url: "https://bloodhound.readthedocs.io/" }
@@ -2480,6 +3610,7 @@
     /* State */
     let currentBranch = "cse";
     let currentFilter = "all";
+    let activeRoleFilter = "all";
     let currentView = "graph";
     let completedSkills = new Set();
     let audioEnabled = true;
@@ -2536,6 +3667,14 @@
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
           osc.start(now);
           osc.stop(now + 0.4);
+        } else if (type === 'warp') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.3);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.start(now);
+          osc.stop(now + 0.45);
         }
       } catch (e) {}
     }
@@ -2575,6 +3714,15 @@
       document.getElementById('hud-branch-tag').textContent = `${branchId.toUpperCase()} // ACTIVE`;
       render();
       update3DMatrix();
+    }
+
+    /* Industry Role Filtering */
+    function selectRole(roleId, el) {
+      activeRoleFilter = roleId;
+      playSfx('click');
+      document.querySelectorAll('.role-pills-row .role-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      render();
     }
 
     /* Render Application */
@@ -2648,7 +3796,8 @@
 
         const state = getSkillState(skill);
         const node = document.createElement('div');
-        node.className = `tree-node ${state}`;
+        const isRoleMatch = activeRoleFilter !== 'all' && skill.roles && skill.roles.includes(activeRoleFilter);
+        node.className = `tree-node ${state} ${isRoleMatch ? 'role-highlight' : ''}`;
         node.style.left = `${x}px`;
         node.style.top = `${y}px`;
         node.onclick = () => openDrawer(skill.id);
@@ -2707,8 +3856,10 @@
         if (currentFilter === 'done' && state !== 'done') return;
         if (currentFilter === 'locked' && state !== 'locked') return;
 
+        const isRoleMatch = activeRoleFilter !== 'all' && skill.roles && skill.roles.includes(activeRoleFilter);
+
         const box = document.createElement('div');
-        box.className = `skill-box ${state}`;
+        box.className = `skill-box ${state} ${isRoleMatch ? 'role-highlight' : ''}`;
         box.onclick = () => openDrawer(skill.id);
 
         let badgeClass = "badge-locked", badgeTxt = "🔒 Locked";
@@ -2802,7 +3953,7 @@
       else if (state === 'ready') { pill.className = 'box-badge badge-ready'; pill.textContent = 'READY TO START ⚡'; }
       else { pill.className = 'box-badge badge-locked'; pill.textContent = 'LOCKED 🔒 (NEEDS PREREQUISITES)'; }
 
-      // Prerequisites
+      // Tab 1: Prerequisites
       const prereqsBox = document.getElementById('d-prereqs');
       prereqsBox.innerHTML = '';
       if (!skill.prerequisites || skill.prerequisites.length === 0) {
@@ -2819,7 +3970,27 @@
         });
       }
 
-      // Resources
+      // Tab 2: Study Guide
+      if (skill.studyGuide) {
+        document.getElementById('d-study-concept').innerHTML = skill.studyGuide.concept;
+        const qaUl = document.getElementById('d-study-qa');
+        qaUl.innerHTML = '';
+        skill.studyGuide.qa.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = item;
+          qaUl.appendChild(li);
+        });
+        document.getElementById('d-study-pitfall').textContent = skill.studyGuide.pitfall;
+      }
+
+      // Tab 3: Code Snippet
+      if (skill.codeSnippet) {
+        document.getElementById('d-code-lang').textContent = skill.codeSnippet.lang;
+        document.getElementById('d-code-snippet').textContent = skill.codeSnippet.code;
+        document.getElementById('d-code-notes').textContent = skill.codeSnippet.notes;
+      }
+
+      // Tab 4: Resources
       const resBox = document.getElementById('d-resources');
       resBox.innerHTML = '';
       skill.resources.forEach(r => {
@@ -2852,7 +4023,18 @@
         actBtn.className = 'btn btn-primary';
       }
 
+      switchDrawerTab('overview');
       document.getElementById('drawer-overlay').classList.add('open');
+    }
+
+    function switchDrawerTab(tabName) {
+      playSfx('click');
+      ['overview', 'study', 'code', 'resources'].forEach(t => {
+        document.getElementById(`tab-d-${t}`).classList.remove('active');
+        document.getElementById(`d-pane-${t}`).style.display = 'none';
+      });
+      document.getElementById(`tab-d-${tabName}`).classList.add('active');
+      document.getElementById(`d-pane-${tabName}`).style.display = 'flex';
     }
 
     function openCurrentTarget() {
@@ -2974,8 +4156,11 @@
       }
     });
 
-    /* Three.js 3D Isometric Matrix */
-    let scene, camera, renderer, nodeGroup, raycaster, mouse;
+    /* ==========================================================================
+       HYPER 3D ISOMETRIC ENGINE (STARFIELD + CAMERA WARP FLY-IN)
+       ========================================================================== */
+    let scene, camera, renderer, nodeGroup, particles, raycaster, mouse;
+    let targetCameraZ = 20, isWarping = false;
 
     function init3D() {
       const container = document.querySelector('.canvas-card');
@@ -2987,20 +4172,36 @@
 
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
-      camera.position.set(0, 4, 20);
+      
+      // Start camera far away for the first-time hyper-warp intro
+      camera.position.set(0, 18, 75);
 
       renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
       renderer.setSize(w, h);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
       scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-      const p1 = new THREE.PointLight(0x3b82f6, 2, 50);
-      p1.position.set(10, 10, 10);
+      const p1 = new THREE.PointLight(0x3b82f6, 2.5, 60);
+      p1.position.set(10, 12, 10);
       scene.add(p1);
 
-      const p2 = new THREE.PointLight(0x10b981, 1.5, 40);
-      p2.position.set(-10, -5, 5);
+      const p2 = new THREE.PointLight(0x10b981, 1.8, 50);
+      p2.position.set(-10, -6, 8);
       scene.add(p2);
+
+      // Starfield / Luminous Cosmic Particles
+      const starGeo = new THREE.BufferGeometry();
+      const starCount = 1000;
+      const starPos = new Float32Array(starCount * 3);
+      for (let i = 0; i < starCount * 3; i += 3) {
+        starPos[i] = (Math.random() - 0.5) * 80;
+        starPos[i+1] = (Math.random() - 0.5) * 50;
+        starPos[i+2] = (Math.random() - 0.5) * 80;
+      }
+      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+      const starMat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.25, transparent: true, opacity: 0.6 });
+      particles = new THREE.Points(starGeo, starMat);
+      scene.add(particles);
 
       nodeGroup = new THREE.Group();
       scene.add(nodeGroup);
@@ -3009,6 +4210,9 @@
       mouse = new THREE.Vector2();
 
       update3DMatrix();
+
+      // Trigger the hyper-warp fly-in
+      triggerHyperWarp();
 
       container.addEventListener('mousemove', e => {
         const rect = container.getBoundingClientRect();
@@ -3044,12 +4248,31 @@
 
       function animate() {
         requestAnimationFrame(animate);
+
+        // Smooth camera warp interpolation
+        camera.position.z += (targetCameraZ - camera.position.z) * 0.045;
+        camera.position.y += (4 - camera.position.y) * 0.045;
+
+        // Particle subtle drift
+        if (particles) {
+          particles.rotation.y += 0.0006;
+          particles.rotation.x += 0.0003;
+        }
+
+        // Float node group gently
         if (nodeGroup) {
           nodeGroup.position.y = Math.sin(Date.now() * 0.0015) * 0.2;
         }
+
         renderer.render(scene, camera);
       }
       animate();
+    }
+
+    function triggerHyperWarp() {
+      playSfx('warp');
+      camera.position.set(0, 25, 75);
+      targetCameraZ = 20;
     }
 
     function update3DMatrix() {
