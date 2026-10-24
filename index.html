@@ -61,6 +61,14 @@
       --shadow-glass: 0 10px 35px 0 rgba(0, 0, 0, 0.5);
       --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.25);
       --transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Responsive Ambient Background & Canvas Tokens */
+      --branch-glow-1: rgba(59, 130, 246, 0.22);
+      --branch-glow-2: rgba(6, 182, 212, 0.18);
+      --branch-glow-cursor: rgba(59, 130, 246, 0.14);
+      --canvas-bg: radial-gradient(circle at 50% 50%, #0d1b33 0%, #020617 100%);
+      --canvas-border: rgba(59, 130, 246, 0.45);
+      --canvas-glow: 0 0 35px rgba(59, 130, 246, 0.25);
     }
 
     [data-theme="light"] {
@@ -80,6 +88,14 @@
 
       --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
       --shadow-glow: 0 0 25px rgba(37, 99, 235, 0.15);
+
+      /* Responsive Background Tokens in Light Mode */
+      --branch-glow-1: rgba(37, 99, 235, 0.16);
+      --branch-glow-2: rgba(14, 165, 233, 0.12);
+      --branch-glow-cursor: rgba(37, 99, 235, 0.12);
+      --canvas-bg: radial-gradient(circle at 50% 50%, #091322 0%, #020617 100%);
+      --canvas-border: rgba(37, 99, 235, 0.55);
+      --canvas-glow: 0 0 35px rgba(37, 99, 235, 0.25);
     }
 
     *, *::before, *::after {
@@ -99,26 +115,36 @@
       position: relative;
     }
 
-    /* Ambient Background Glows */
+    /* Responsive Ambient Background Glows */
     .ambient-glow-1 {
       position: absolute;
-      top: -100px;
-      left: 15%;
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.16), transparent 70%);
+      top: -120px;
+      left: 12%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--branch-glow-1), transparent 70%);
       pointer-events: none;
       z-index: 0;
+      transition: background 0.8s ease;
     }
     .ambient-glow-2 {
       position: absolute;
-      top: 350px;
+      top: 320px;
       right: 5%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.14), transparent 70%);
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, var(--branch-glow-2), transparent 70%);
       pointer-events: none;
       z-index: 0;
+      transition: background 0.8s ease;
+    }
+    .mouse-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(650px circle at var(--mx, 50%) var(--my, 30%), var(--branch-glow-cursor), transparent 75%);
+      transition: background 0.4s ease;
     }
 
     .bg-grid {
@@ -363,15 +389,16 @@
       letter-spacing: 0.05em;
     }
 
-    /* 3D Viewport Box */
+    /* 3D Viewport Box - Always high-contrast engineering matrix */
     .canvas-card {
       position: relative;
       height: 400px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-accent);
+      background: var(--canvas-bg);
+      border: 1px solid var(--canvas-border);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: var(--shadow-glow);
+      box-shadow: var(--canvas-glow), 0 12px 35px rgba(0, 0, 0, 0.4);
+      transition: background 0.6s ease, border-color 0.4s ease, box-shadow 0.6s ease;
     }
 
     #three-viewport {
@@ -1527,7 +1554,8 @@
 </head>
 <body data-theme="dark">
 
-  <!-- Ambient Glows -->
+  <!-- Responsive Ambient Background Glows & Cursor Aura -->
+  <div class="mouse-glow"></div>
   <div class="ambient-glow-1"></div>
   <div class="ambient-glow-2"></div>
   <div class="bg-grid"></div>
@@ -3702,10 +3730,51 @@ p.sendline(payload)`,
       return skill.prerequisites.every(id => completedSkills.has(id)) ? "ready" : "locked";
     }
 
+    const BRANCH_PALETTES = {
+      cse: {
+        glow1: "rgba(59, 130, 246, 0.22)",
+        glow2: "rgba(6, 182, 212, 0.18)",
+        cursor: "rgba(59, 130, 246, 0.14)",
+        border: "rgba(59, 130, 246, 0.45)",
+        p1: 0x3b82f6, p2: 0x10b981
+      },
+      ai: {
+        glow1: "rgba(139, 92, 246, 0.26)",
+        glow2: "rgba(236, 72, 153, 0.20)",
+        cursor: "rgba(139, 92, 246, 0.18)",
+        border: "rgba(139, 92, 246, 0.5)",
+        p1: 0x8b5cf6, p2: 0xec4899
+      },
+      ds: {
+        glow1: "rgba(16, 185, 129, 0.24)",
+        glow2: "rgba(20, 184, 166, 0.20)",
+        cursor: "rgba(16, 185, 129, 0.16)",
+        border: "rgba(16, 185, 129, 0.5)",
+        p1: 0x10b981, p2: 0x06b6d4
+      },
+      sec: {
+        glow1: "rgba(245, 158, 11, 0.24)",
+        glow2: "rgba(239, 68, 68, 0.20)",
+        cursor: "rgba(245, 158, 11, 0.16)",
+        border: "rgba(245, 158, 11, 0.5)",
+        p1: 0xf59e0b, p2: 0xef4444
+      }
+    };
+
     /* Switch Branch */
     function switchBranch(branchId) {
       currentBranch = branchId;
       playSfx('click');
+
+      // Responsive Background Palette Shift
+      const pal = BRANCH_PALETTES[branchId] || BRANCH_PALETTES.cse;
+      document.documentElement.style.setProperty('--branch-glow-1', pal.glow1);
+      document.documentElement.style.setProperty('--branch-glow-2', pal.glow2);
+      document.documentElement.style.setProperty('--branch-glow-cursor', pal.cursor);
+      document.documentElement.style.setProperty('--canvas-border', pal.border);
+
+      if (typeof p1 !== 'undefined' && p1) p1.color.setHex(pal.p1);
+      if (typeof p2 !== 'undefined' && p2) p2.color.setHex(pal.p2);
 
       document.querySelectorAll('.branch-card').forEach(c => c.classList.remove('active'));
       const activeTab = document.getElementById(`tab-${branchId}`);
@@ -4160,6 +4229,7 @@ p.sendline(payload)`,
        HYPER 3D ISOMETRIC ENGINE (STARFIELD + CAMERA WARP FLY-IN)
        ========================================================================== */
     let scene, camera, renderer, nodeGroup, particles, raycaster, mouse;
+    let p1, p2;
     let targetCameraZ = 20, isWarping = false;
 
     function init3D() {
@@ -4181,11 +4251,11 @@ p.sendline(payload)`,
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
       scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-      const p1 = new THREE.PointLight(0x3b82f6, 2.5, 60);
+      p1 = new THREE.PointLight(0x3b82f6, 2.5, 60);
       p1.position.set(10, 12, 10);
       scene.add(p1);
 
-      const p2 = new THREE.PointLight(0x10b981, 1.8, 50);
+      p2 = new THREE.PointLight(0x10b981, 1.8, 50);
       p2.position.set(-10, -6, 8);
       scene.add(p2);
 
@@ -4337,6 +4407,12 @@ p.sendline(payload)`,
       loadState();
       render();
       setTimeout(init3D, 80);
+
+      // Mouse-Reactive Dynamic Aura
+      window.addEventListener('pointermove', e => {
+        document.documentElement.style.setProperty('--mx', `${e.clientX}px`);
+        document.documentElement.style.setProperty('--my', `${e.clientY}px`);
+      });
     });
   </script>
 </body>
